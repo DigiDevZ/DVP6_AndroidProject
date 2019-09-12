@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ProjectRemnant</string>
+
+    <string name="authentication_activity_btn_login">Login</string>
+    <string name="authentication_activity_btn_signup">Sign-up</string>
+
+    <string name="signup_activity_et_username">Username:</string>
+    <string name="signup_activity_et_password">Password:</string>
+    <string name="signup_activity_et_confirmPassword">Confirm Password:</string>
+    <string name="signup_activity_btn_create">Create Account</string>
+
 </resources>
