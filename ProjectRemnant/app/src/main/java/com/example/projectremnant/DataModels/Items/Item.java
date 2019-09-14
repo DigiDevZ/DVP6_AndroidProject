@@ -9,7 +9,27 @@ public class Item {
 
     private long mItemId;
 
-    //
+    //Constructors
+    public Item() {
+
+    }
+
+    //Item with all properties EXCEPT itemBonus, for use with the armor and weapons items.
+    public Item(String _itemName, long _itemId, String _unlockCriteria, String _wikiPage) {
+        mItemName = _itemName;
+        mItemId = _itemId;
+        mItemUnlockCriteria = _unlockCriteria;
+        mItemWikiPage = _wikiPage;
+    }
+
+    //Item with all properties.
+    public Item(String _itemName, long _itemId, String _itemBonus, String _unlockCriteria, String _wikiPage) {
+        mItemName = _itemName;
+        mItemId = _itemId;
+        mItemBonus = _itemBonus;
+        mItemUnlockCriteria = _unlockCriteria;
+        mItemWikiPage = _wikiPage;
+    }
 
     public String getItemName() {
         return mItemName;
