@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.projectremnant.Authentication.LoginActivity;
+import com.example.projectremnant.Authentication.SignupActivity;
+
 public class AuthenticationActivity extends AppCompatActivity {
 
     @Override

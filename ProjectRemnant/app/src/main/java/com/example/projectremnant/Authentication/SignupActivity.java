@@ -1,4 +1,4 @@
-package com.example.projectremnant;
+package com.example.projectremnant.Authentication;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectremnant.DataModels.User;
+import com.example.projectremnant.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -90,6 +91,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: Need to add a utility class that encodes and decodes the string password for storing in the database.
 
     private void updateUserCount() {
         mDatabase.addValueEventListener(new ValueEventListener() {

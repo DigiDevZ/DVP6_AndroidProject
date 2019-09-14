@@ -1,4 +1,4 @@
-package com.example.projectremnant;
+package com.example.projectremnant.Authentication;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectremnant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,9 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Check for the user with the entered username and then validate that, that user has the same password.
     private void loginTapped() {
 
-        //TODO: Check for the user with the users name and then validate that that user has the same password.
         String userName = mEt_userName.getText().toString();
         final String password = mEt_password.getText().toString();
 
@@ -68,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
                     if(password.equals(userPass)) {
                         //TODO: Launch the intent to the home screen.
                         Log.i(TAG, "onDataChange: login succesful.");
+                    }else {
+                        //Toast that login failed, either username or password is wrong.
+                        Log.i(TAG, "onDataChange: login failed, password expected: " + password + " found: " + userPass);
                     }
                 }
                 else {
