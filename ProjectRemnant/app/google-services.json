@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "389592190509",
+    "firebase_url": "https://dvp6-67707.firebaseio.com",
+    "project_id": "dvp6-67707",
+    "storage_bucket": "dvp6-67707.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389592190509:android:6facc413074ea3a02b32a4",
+        "android_client_info": {
+          "package_name": "com.example.projectremnant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389592190509-kv0dkajembp67jaudctjr90vhnltqa8i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projectremnant",
+            "certificate_hash": "67e05a56eb0801b20ba1e3c1223be0786ddbcdc6"
+          }
+        },
+        {
+          "client_id": "389592190509-nup9i9qo9pmbos3toc5e8sft46evcjj8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR59YDSk5CnAZwLnHEwFMrJX6pkTwE_pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389592190509-nup9i9qo9pmbos3toc5e8sft46evcjj8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

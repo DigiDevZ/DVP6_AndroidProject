@@ -14,11 +14,16 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authentication_activity);
 
+        setOnClickListeners();
+    }
+
+    private void setOnClickListeners() {
         Button btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add method to authenticate the user.
+                //Launch the login process.
+                loginTapped();
             }
         });
 
@@ -26,10 +31,15 @@ public class AuthenticationActivity extends AppCompatActivity {
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add method to launch the sign up activity.
+                //Launch the sign up process.
                 signupTapped();
             }
         });
+    }
+
+    private void loginTapped() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 
     private void signupTapped() {

@@ -9,4 +9,8 @@
     <string name="signup_activity_et_confirmPassword">Confirm Password:</string>
     <string name="signup_activity_btn_create">Create Account</string>
 
+    <string name="signup_activity_toast_passwordsNotMatching">The passwords you entered do not match, please re-enter them.</string>
+
+    <string name="login_activity_btn_login">Login</string>
+
 </resources>
