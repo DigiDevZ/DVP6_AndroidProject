@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectremnant.Checklist.Fragments.CategoryFragment;
 import com.example.projectremnant.R;
 
 public class ChecklistActivity extends AppCompatActivity {
@@ -17,5 +18,13 @@ public class ChecklistActivity extends AppCompatActivity {
         //TODO: Need to launch two fragments, the progress fragment and category fragment.
         // Category fragment is a gridview of 3 columns
         // Two Rows.
+
+        updateCategories();
+    }
+
+    private void updateCategories() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container_categories, CategoryFragment.newInstance())
+                .commit();
     }
 }

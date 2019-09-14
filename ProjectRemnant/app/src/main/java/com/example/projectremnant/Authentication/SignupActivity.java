@@ -1,5 +1,6 @@
 package com.example.projectremnant.Authentication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAccount();
+                checkUserNameTaken();
             }
         });
     }
@@ -55,35 +57,26 @@ public class SignupActivity extends AppCompatActivity {
         EditText et_pass = findViewById(R.id.et_password);
         String password = et_pass.getText().toString();
 
-        EditText et_confirmPass = findViewById(R.id.et_confirmPassword);
-        String confirmPassword = et_confirmPass.getText().toString();
+        final EditText et_confirmPass = findViewById(R.id.et_confirmPassword);
 
         EditText et_userName = findViewById(R.id.et_username);
         String userName = et_userName.getText().toString();
 
+        //Grab the confirm password and validate it.
+        String confirmPassword = et_confirmPass.getText().toString();
         boolean validPassword = password.equals(confirmPassword);
+
+        //If the user tries to make a username with the name admin, refuse them.
+        if(userName.equals("admin")) {
+            Toast.makeText(this, "Try again buddy. This name is taken.", Toast.LENGTH_SHORT).show();
+            validPassword = false;
+        }
+
         if(validPassword) {
             updateUserCount();
-
             User newUser = new User(userName, password, "Empty", mUserCount);
+            createNewUserAccount(newUser);
             Log.i(TAG, "createAccount: users: " + mUserCount);
-
-            //On successful user creation, update the user count and then intent to the home screen.
-            mDatabase.child("users").child(userName).setValue(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    mDatabase.child("userCount").setValue(mUserCount+1);
-                    //TODO: Intent to the home screen.
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    e.printStackTrace();
-                    //Failed to make account try again.
-                    //TODO: Toast, description one line above.
-                }
-            });
         }else {
             //Toast for passwords not matching.
             et_pass.setText("");
@@ -108,6 +101,52 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void createNewUserAccount(User _newUser) {
+        //On successful user creation, update the user count and then intent to the home screen.
+        mDatabase.child("users").child(_newUser.mUserName).setValue(_newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mDatabase.child("userCount").setValue(mUserCount+1);
+                //Intent to the checklist screen.
+                Intent i = new Intent(getApplicationContext(), ChecklistActivity.class);
+                startActivity(i);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+                //Failed to make account try again.
+                //TODO: Toast, description one line above.
+            }
+        });
+    }
+
+    private void checkUserNameTaken() {
+
+        final EditText et_userName = findViewById(R.id.et_username);
+        String userName = et_userName.getText().toString();
+
+        mDatabase.child("users").child(userName).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    //Username already exists
+                    Toast.makeText(getApplicationContext(), "Username taken", Toast.LENGTH_SHORT).show();
+                    et_userName.setText("");
+                }
+                else {
+                    //Username does not exist, system can create new account for user.
+                    createAccount();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Access to the database is down. Try again later.
             }
         });
     }
