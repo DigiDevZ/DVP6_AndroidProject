@@ -1,4 +1,4 @@
-package com.example.projectremnant;
+package com.example.projectremnant.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.projectremnant.Authentication.LoginActivity;
 import com.example.projectremnant.Authentication.SignupActivity;
+import com.example.projectremnant.R;
 
 public class AuthenticationActivity extends AppCompatActivity {
 

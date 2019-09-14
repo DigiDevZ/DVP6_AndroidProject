@@ -13,4 +13,7 @@
 
     <string name="login_activity_btn_login">Login</string>
 
+    <string name="login_activity_toast_accountNotFound">No account associated with that username.</string>
+    <string name="login_activity_toast_loginFailed">Login failed. Username or Password is wrong.</string>
+
 </resources>

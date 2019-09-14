@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     //User exists
-
                     String userPass = dataSnapshot.child("mUserPass").getValue(String.class);
                     Log.i(TAG, "onDataChange: password: " + userPass);
 
@@ -72,17 +71,18 @@ public class LoginActivity extends AppCompatActivity {
                     }else {
                         //Toast that login failed, either username or password is wrong.
                         Log.i(TAG, "onDataChange: login failed, password expected: " + password + " found: " + userPass);
+                        Toast.makeText(getApplicationContext(), R.string.login_activity_toast_loginFailed, Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
                     //Toast that account was not found with that username.
-                    Toast.makeText(getApplicationContext(), "No account associated with that username.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.login_activity_toast_accountNotFound, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                //Access to the database is down. Try again later.
             }
         });
         //End of loginTapped.

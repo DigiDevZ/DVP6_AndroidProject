@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private long mUserCount = 0;
 
-    //NOTE: Need to use actual testing device when working with firebase database.
+    //NOTE: Need to use actual testing device when working with fire base database.
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +81,7 @@ public class SignupActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception e) {
                     e.printStackTrace();
                     //Failed to make account try again.
+                    //TODO: Toast, description one line above.
                 }
             });
         }else {
