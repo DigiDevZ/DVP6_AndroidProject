@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectremnant.Checklist.Fragments.CategoryFragment;
 import com.example.projectremnant.Contracts.ItemContracts;
+import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.DataModels.Items.Weapon;
 import com.example.projectremnant.R;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ChecklistActivity extends AppCompatActivity {
+public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener {
 
     private static final String TAG = "ChecklistActivity.TAG";
 
@@ -37,17 +38,13 @@ public class ChecklistActivity extends AppCompatActivity {
         // Category fragment is a gridview of 3 columns
         // Two Rows.
 
-        updateCategories();
-
         //TODO: Grab all items from the database and put them in an array of array of item objects.
         gatherItems();
-
-
     }
 
     private void updateCategories() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container_categories, CategoryFragment.newInstance())
+                .add(R.id.fragment_container_categories, CategoryFragment.newInstance(mItems))
                 .commit();
     }
 
@@ -74,10 +71,20 @@ public class ChecklistActivity extends AppCompatActivity {
                 Log.i(TAG, "onDataChange: rings: " + ringsCount);
                 Log.i(TAG, "onDataChange: weapons: " + weaponsCount);
 
-                //TODO: Gather the base items into their arrays.
+                //Gather the base items into their arrays.
                 gatherBaseItems(amuletsCount, modsCount, ringsCount, traitsCount);
 
-                //TODO: Gather the special items into their arrays. Armor and weapons.
+                //Gather the special items into their arrays. Armor and weapons.
+                gatherSpecialItems(weaponsCount, armorSetsCount);
+
+                try {
+                    Thread.sleep(1000);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                //Update the fragments.
+                updateCategories();
             }
 
             @Override
@@ -87,7 +94,7 @@ public class ChecklistActivity extends AppCompatActivity {
         });
     }
 
-    //TODO: Data retrieval works, use the setup from the amulets for the rest of these items, have to add the item to the array as well.
+    //This method will gather the base items from the database.
     private void gatherBaseItems(long _amuletCount, long _modCount, long _ringCount, long _traitCount) {
 
         //Item array lists
@@ -197,6 +204,7 @@ public class ChecklistActivity extends AppCompatActivity {
         mItems[3] = traits;
     }
 
+    //This method will gather the special items from the database.
     private void gatherSpecialItems(long _weaponsCount, long _armorSetsCount) {
 
         //Item array lists 
@@ -227,9 +235,74 @@ public class ChecklistActivity extends AppCompatActivity {
             });
         }
 
+        //Gather all of the armor sets and store them into the armorSets array.
+        for (int i = 0; i < _armorSetsCount; i++) {
+            mDatabase.child("armor").child("armorSet_" + (i+1)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long armorSetId = dataSnapshot.child(ItemContracts.KEY_ARMORSETID).getValue(Long.class);
+                    String armorSetName = dataSnapshot.child(ItemContracts.KEY_ARMORSETNAME).getValue(String.class);
+                    String armorSetBonus = dataSnapshot.child(ItemContracts.KEY_ARMORSETBONUS).getValue(String.class);
+                    String armorSetPieces = dataSnapshot.child(ItemContracts.KEY_ARMORPIECES).getValue(String.class);
+                    String armorSetBonusStages = dataSnapshot.child(ItemContracts.KEY_ARMORSETBONUSSTAGES).getValue(String.class);
+                    String unlockCriteria = dataSnapshot.child(ItemContracts.KEY_UNLOCKCRITERIA).getValue(String.class);
+                    String wikiPage = dataSnapshot.child(ItemContracts.KEY_WIKIPAGE).getValue(String.class);
 
+                    Armor armor = new Armor(armorSetName, armorSetId, armorSetPieces, armorSetBonus, armorSetBonusStages, unlockCriteria, wikiPage);
+                    armor.getArmorBonusStages();
+                    armor.getArmorPieces();
 
+                    armorSets.add(armor);
+                    Log.i(TAG, "onDataChange: Armor Set " + armorSetId + " added");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        //Add the four item array created above to the mItems array.
+        // Index: 4 = weapons, 5 = armor sets
         mItems[4] = weapons;
+        mItems[5] = armorSets;
     }
 
+    /**
+     * Interface Methods for the Category Fragment.
+     */
+
+
+    //TODO: Implement the lists fragment that pulls up and has a list with all of the items of that category.
+    // Then the item activity.
+    @Override
+    public void armorsTapped(ArrayList<Item> _armorSets) {
+        Log.i(TAG, "armorsTapped: size: " + _armorSets.size());
+    }
+
+    @Override
+    public void amuletsTapped(ArrayList<Item> _amulets) {
+        Log.i(TAG, "amuletsTapped: size: " + _amulets.size());
+    }
+
+    @Override
+    public void weaponsTapped(ArrayList<Item> _weapons) {
+        Log.i(TAG, "weaponsTapped: size: " + _weapons.size());
+    }
+
+    @Override
+    public void modsTapped(ArrayList<Item> _mods) {
+        Log.i(TAG, "modsTapped: size: " + _mods.size());
+    }
+
+    @Override
+    public void traitsTapped(ArrayList<Item> _traits) {
+        Log.i(TAG, "traitsTapped: size: " + _traits.size());
+    }
+
+    @Override
+    public void ringsTapped(ArrayList<Item> _rings) {
+        Log.i(TAG, "ringsTapped: size: " + _rings.size());
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.projectremnant.DataModels.Items;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 
     private String mItemName;
     private String mItemBonus;

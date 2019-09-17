@@ -1,6 +1,8 @@
 package com.example.projectremnant.DataModels.Items;
 
-public class Weapon extends Item {
+import java.io.Serializable;
+
+public class Weapon extends Item implements Serializable {
 
     private long mWeaponCategory;
 
