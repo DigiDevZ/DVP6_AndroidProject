@@ -2,12 +2,16 @@ package com.example.projectremnant.Checklist;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.projectremnant.Checklist.Fragments.CategoryFragment;
+import com.example.projectremnant.Checklist.Fragments.ChecklistFragment;
 import com.example.projectremnant.Contracts.ItemContracts;
 import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
@@ -19,12 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener {
+public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener, ChecklistFragment.OnItemClicked {
 
     private static final String TAG = "ChecklistActivity.TAG";
+
+    private static final String TAG_C = "FragmentC";
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("items");
     private ArrayList<Item>[] mItems = (ArrayList<Item>[]) new ArrayList[6];
@@ -38,13 +43,38 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         // Category fragment is a gridview of 3 columns
         // Two Rows.
 
-        //TODO: Grab all items from the database and put them in an array of array of item objects.
+        //Grab all items from the database and put them in an array of array of item objects.
         gatherItems();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().findFragmentByTag(TAG_C) != null) {
+            //If the fragment being viewed is the checklist fragment, then pop it out of the back stack.
+            getSupportFragmentManager().popBackStack("ChecklistFragment",
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * The below methods are used for launching fragments.
+     */
 
     private void updateCategories() {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container_categories, CategoryFragment.newInstance(mItems))
+                .commit();
+    }
+
+    private void loadChecklist(int _category, ArrayList<Item> _items) {
+        FrameLayout frameLayout = findViewById(R.id.fragment_container_list);
+        frameLayout.setVisibility(View.VISIBLE);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_list, ChecklistFragment.newInstance(_items, _category), TAG_C)
+                .addToBackStack("ChecklistFragment")
                 .commit();
     }
 
@@ -279,30 +309,45 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     @Override
     public void armorsTapped(ArrayList<Item> _armorSets) {
         Log.i(TAG, "armorsTapped: size: " + _armorSets.size());
+        loadChecklist(5, _armorSets);
     }
 
     @Override
     public void amuletsTapped(ArrayList<Item> _amulets) {
         Log.i(TAG, "amuletsTapped: size: " + _amulets.size());
+        loadChecklist(0, _amulets);
     }
 
     @Override
     public void weaponsTapped(ArrayList<Item> _weapons) {
         Log.i(TAG, "weaponsTapped: size: " + _weapons.size());
+        loadChecklist(4, _weapons);
     }
 
     @Override
     public void modsTapped(ArrayList<Item> _mods) {
         Log.i(TAG, "modsTapped: size: " + _mods.size());
+        loadChecklist(1, _mods);
     }
 
     @Override
     public void traitsTapped(ArrayList<Item> _traits) {
         Log.i(TAG, "traitsTapped: size: " + _traits.size());
+        loadChecklist(3, _traits);
     }
 
     @Override
     public void ringsTapped(ArrayList<Item> _rings) {
         Log.i(TAG, "ringsTapped: size: " + _rings.size());
+        loadChecklist(2, _rings);
+    }
+
+    /**
+     * Interface Methods for the Checklist Fragment.
+     */
+    
+    @Override
+    public void itemClicked(int _position, int _category) {
+        Log.i(TAG, "itemClicked: ");
     }
 }
