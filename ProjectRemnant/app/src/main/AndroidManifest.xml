@@ -25,6 +25,7 @@
             android:noHistory="true"/>
         <activity android:name=".Checklist.ChecklistActivity"/>
         <activity android:name=".Sessions.SessionActivity"/>
+        <activity android:name=".ItemInfo.ItemDetailsActivity"/>
     </application>
 
 </manifest>

@@ -32,4 +32,11 @@
     <string name="checklist_activity_alert_title">Session Finder</string>
     <string name="checklist_activity_alert_message">Welcome to the Session Finder, here you can search for any sessions that are already up, or create your own.</string>
 
+    <string name="item_details_activity_category_amulet">Amulet</string>
+    <string name="item_details_activity_category_mod">Mod</string>
+    <string name="item_details_activity_category_ring">Ring</string>
+    <string name="item_details_activity_category_trait">Trait</string>
+    <string name="item_details_activity_category_armor">Armor Set</string>
+    <string name="item_details_activity_category_weapon">Weapon</string>
+
 </resources>

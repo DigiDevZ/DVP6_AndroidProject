@@ -22,6 +22,7 @@ import com.example.projectremnant.Contracts.ItemContracts;
 import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.DataModels.Items.Weapon;
+import com.example.projectremnant.ItemInfo.ItemDetailsActivity;
 import com.example.projectremnant.R;
 import com.example.projectremnant.Sessions.SessionActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -432,6 +433,12 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     
     @Override
     public void itemClicked(int _position, int _category) {
-        Log.i(TAG, "itemClicked: ");
+        Log.i(TAG, "itemClicked: position: " + _position + " category: " + _category);
+
+        //Get the item selected and the category of that item and then start the item details activity.
+        Intent starter = new Intent(this, ItemDetailsActivity.class);
+        starter.putExtra(ItemDetailsActivity.EXTRA_ITEM, mItems[_category].get(_position));
+        starter.putExtra(ItemDetailsActivity.EXTRA_CATEGORY, _category);
+        startActivity(starter);
     }
 }

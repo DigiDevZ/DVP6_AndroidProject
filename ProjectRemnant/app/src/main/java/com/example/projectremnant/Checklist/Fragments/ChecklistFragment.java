@@ -2,7 +2,6 @@ package com.example.projectremnant.Checklist.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 
 public class ChecklistFragment extends ListFragment {
 
-    private static final String TAG = "ChecklistFragment.TAG";
+    //TODO: Will need to add an interface method for checking the state of the checkbox when it is checked.
 
     private static final String ARG_ITEMS = "items";
     private static final String ARG_CATEGORY = "category";
@@ -71,8 +70,8 @@ public class ChecklistFragment extends ListFragment {
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Log.i(TAG, "onListItemClick: ");
 
+        //NOTE: Setting the xml for the adapter layout, the row items are not focusable and their text is not selectable, that was how this item click was fixed.
         int category = (getArguments() != null ? getArguments().getInt(ARG_CATEGORY) : 0);
         mListener.itemClicked(position, category);
     }

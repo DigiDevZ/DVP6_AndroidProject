@@ -67,15 +67,6 @@ public class CategoryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final ArrayList<String> categories = new ArrayList<>();
-        categories.add("Amulets");
-        categories.add("Armor");
-        categories.add("Mods");
-        categories.add("Traits");
-        categories.add("Rings");
-        categories.add("Weapons");
-
-
         ArrayList<Item>[] itemsArray = (ArrayList<Item>[]) (getArguments() != null ? getArguments().getSerializable(ARG_ITEMS) : null);
         if(itemsArray != null) {
             //Do something.

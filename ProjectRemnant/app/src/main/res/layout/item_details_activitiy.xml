@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_viewWiki"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="View WikiPage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_itemCategory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Item Category"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemName"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemName"
+        app:layout_constraintTop_toBottomOf="@+id/tv_itemName" />
+
+    <TextView
+        android:id="@+id/tv_itemBonus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="Item Bonus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_Horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemCategory"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemCategory"
+        app:layout_constraintTop_toBottomOf="@+id/tv_itemCategory" />
+
+    <TextView
+        android:id="@+id/tv_itemUnlockCriteria"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:text="Item Unlock Criteria"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_viewWiki"
+        app:layout_constraintEnd_toStartOf="@+id/cb_itemOwned"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemBonus"
+        app:layout_constraintTop_toTopOf="@+id/guideline_Horizontal" />
+
+    <TextView
+        android:id="@+id/tv_itemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Item Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <CheckBox
+        android:id="@+id/cb_itemOwned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Owned"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_itemUnlockCriteria"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemBonus"
+        app:layout_constraintTop_toTopOf="@+id/tv_itemUnlockCriteria" />
+</androidx.constraintlayout.widget.ConstraintLayout>
