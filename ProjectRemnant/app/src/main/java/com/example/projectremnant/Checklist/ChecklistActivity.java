@@ -1,12 +1,18 @@
 package com.example.projectremnant.Checklist;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -17,6 +23,7 @@ import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.DataModels.Items.Weapon;
 import com.example.projectremnant.R;
+import com.example.projectremnant.Sessions.SessionActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,9 +34,12 @@ import java.util.ArrayList;
 
 public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener, ChecklistFragment.OnItemClicked {
 
+    //Tags for keeping track of the backstack of fragments.
     private static final String TAG = "ChecklistActivity.TAG";
-
     private static final String TAG_C = "FragmentC";
+
+    //Variables for handling the data transfer to the session activity.
+    public static final String EXTRA_OPTION = "EXTRA_OPTION";
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("items");
     private ArrayList<Item>[] mItems = (ArrayList<Item>[]) new ArrayList[6];
@@ -38,6 +48,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist_activity);
+        setTitle(R.string.checklist_activity_title_default);
 
         //TODO: Need to launch two fragments, the progress fragment and category fragment.
         // Category fragment is a gridview of 3 columns
@@ -48,11 +59,30 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.checklist_search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.checklist_menu_search) {
+            //TODO: Launch alert dialog for searching finding or cancelling.
+            loadSessionFinderAlertDialog();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
         if(getSupportFragmentManager().findFragmentByTag(TAG_C) != null) {
             //If the fragment being viewed is the checklist fragment, then pop it out of the back stack.
             getSupportFragmentManager().popBackStack("ChecklistFragment",
                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            setTitle(R.string.checklist_activity_title_default);
         }else {
             super.onBackPressed();
         }
@@ -78,6 +108,10 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
                 .commit();
     }
 
+
+    /**
+     * The below methods are custom to this activity.
+     */
 
     //TODO: This may possibly benefit from being put into a service?
     private void gatherItems() {
@@ -299,47 +333,97 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         mItems[5] = armorSets;
     }
 
+
+    private void loadSessionFinderAlertDialog() {
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setCancelable(true);
+
+        //Set the title and message.
+        builder.setTitle(getString(R.string.checklist_activity_alert_title));
+        builder.setMessage(getString(R.string.checklist_activity_alert_message));
+
+        //Search for a session.
+        builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.checklist_activity_alert_search), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Launch the intent to the session activity and load the available sessions.
+                launchSessionActivity("search");
+            }
+        });
+
+        //Create a session.
+        builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.checklist_activity_alert_create), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Launch intent to the session activity and create a form.
+                launchSessionActivity("create");
+            }
+        });
+
+        builder.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.checklist_activity_alert_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do nothing.
+            }
+        });
+
+        builder.show();
+    }
+
+
+    private void launchSessionActivity(String _searchOption) {
+        Intent starter = new Intent(this, SessionActivity.class);
+        starter.putExtra(EXTRA_OPTION, _searchOption);
+        startActivity(starter);
+    }
+
     /**
      * Interface Methods for the Category Fragment.
      */
 
 
-    //TODO: Implement the lists fragment that pulls up and has a list with all of the items of that category.
-    // Then the item activity.
+    //TODO: -DONE-Implement the lists fragment that pulls up and has a list with all of the items of that category.
+    // -NEEDS WORK-Then the item activity.
     @Override
     public void armorsTapped(ArrayList<Item> _armorSets) {
         Log.i(TAG, "armorsTapped: size: " + _armorSets.size());
         loadChecklist(5, _armorSets);
+        setTitle(R.string.checklist_activity_title_armor);
     }
 
     @Override
     public void amuletsTapped(ArrayList<Item> _amulets) {
         Log.i(TAG, "amuletsTapped: size: " + _amulets.size());
         loadChecklist(0, _amulets);
+        setTitle(R.string.checklist_activity_title_amulets);
     }
 
     @Override
     public void weaponsTapped(ArrayList<Item> _weapons) {
         Log.i(TAG, "weaponsTapped: size: " + _weapons.size());
         loadChecklist(4, _weapons);
+        setTitle(R.string.checklist_activity_title_weapon);
     }
 
     @Override
     public void modsTapped(ArrayList<Item> _mods) {
         Log.i(TAG, "modsTapped: size: " + _mods.size());
         loadChecklist(1, _mods);
+        setTitle(R.string.checklist_activity_title_mod);
     }
 
     @Override
     public void traitsTapped(ArrayList<Item> _traits) {
         Log.i(TAG, "traitsTapped: size: " + _traits.size());
         loadChecklist(3, _traits);
+        setTitle(R.string.checklist_activity_title_trait);
     }
 
     @Override
     public void ringsTapped(ArrayList<Item> _rings) {
         Log.i(TAG, "ringsTapped: size: " + _rings.size());
         loadChecklist(2, _rings);
+        setTitle(R.string.checklist_activity_title_ring);
     }
 
     /**

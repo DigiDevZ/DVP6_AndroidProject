@@ -1,4 +1,4 @@
-package com.example.projectremnant.Sessions;
+package com.example.projectremnant.DataModels;
 
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ public class Session {
         mSessionId = UUID.randomUUID().toString();
 
         //Get the date of creation for the session.
-
+        mSessionCreated = _sessionCreated;
     }
 
 
@@ -57,14 +57,8 @@ public class Session {
         mSessionCharacters = _value;
     }
 
-
-
-
     public String toJSON() {
         return null;
     }
-
-
-
 
 }

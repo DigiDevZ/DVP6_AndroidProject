@@ -24,6 +24,7 @@
         <activity android:name=".Authentication.LoginActivity"
             android:noHistory="true"/>
         <activity android:name=".Checklist.ChecklistActivity"/>
+        <activity android:name=".Sessions.SessionActivity"/>
     </application>
 
 </manifest>

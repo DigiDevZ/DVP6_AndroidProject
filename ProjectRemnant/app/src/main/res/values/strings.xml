@@ -16,4 +16,20 @@
     <string name="login_activity_toast_accountNotFound">No account associated with that username.</string>
     <string name="login_activity_toast_loginFailed">Login failed. Username or Password is wrong.</string>
 
+    <string name="checklist_activity_title_armor">Viewing Armor Sets</string>
+    <string name="checklist_activity_title_weapon">Viewing Weapons</string>
+    <string name="checklist_activity_title_ring">Viewing Rings</string>
+    <string name="checklist_activity_title_trait">Viewing Traits</string>
+    <string name="checklist_activity_title_mod">Viewing Mods</string>
+    <string name="checklist_activity_title_amulets">Viewing Amulets</string>
+    <string name="checklist_activity_title_default">Checklist</string>
+
+    <string name="checklist_activity_menu_search">Search</string>
+
+    <string name="checklist_activity_alert_search">Search</string>
+    <string name="checklist_activity_alert_create">Create</string>
+    <string name="checklist_activity_alert_cancel">Cancel</string>
+    <string name="checklist_activity_alert_title">Session Finder</string>
+    <string name="checklist_activity_alert_message">Welcome to the Session Finder, here you can search for any sessions that are already up, or create your own.</string>
+
 </resources>
