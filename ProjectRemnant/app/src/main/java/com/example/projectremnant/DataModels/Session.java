@@ -10,18 +10,20 @@ public class Session {
     private int mSessionPlayersJoined;
     private String mSessionCreated;
     private String mSessionCharacters;
+    private String mSessionDescription;
 
     public Session() {
 
     }
 
-    public Session(String _sessionName, int _sessionLimit, String _sessionCreated, String _sessionCharacters) {
+    public Session(String _sessionName, int _sessionLimit, String _sessionCreated, String _sessionCharacters, String _sessionDescription) {
 
         //Assign the regular properties.
         mSessionName = _sessionName;
         mSessionLimit = _sessionLimit;
         mSessionCreated = _sessionCreated;
         mSessionCharacters = _sessionCharacters;
+        mSessionDescription = _sessionDescription;
 
         //Create the session id when a new session is instantiated.
         mSessionId = UUID.randomUUID().toString();
@@ -41,6 +43,10 @@ public class Session {
 
     public String getSessionName() {
         return mSessionName;
+    }
+
+    public String getSessionDescription() {
+        return mSessionDescription;
     }
 
     public int getSessionPlayersJoined() {
