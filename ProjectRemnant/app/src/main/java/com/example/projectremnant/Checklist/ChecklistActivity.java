@@ -70,7 +70,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.checklist_menu_search) {
-            //TODO: Launch alert dialog for searching finding or cancelling.
+            //Launch alert dialog for searching finding or cancelling.
             loadSessionFinderAlertDialog();
         }
 
@@ -382,9 +382,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
      * Interface Methods for the Category Fragment.
      */
 
-
-    //TODO: -DONE-Implement the lists fragment that pulls up and has a list with all of the items of that category.
-    // -NEEDS WORK-Then the item activity.
     @Override
     public void armorsTapped(ArrayList<Item> _armorSets) {
         Log.i(TAG, "armorsTapped: size: " + _armorSets.size());

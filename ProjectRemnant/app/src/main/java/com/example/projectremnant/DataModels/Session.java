@@ -12,6 +12,9 @@ public class Session {
     private String mSessionCharacters;
     private String mSessionDescription;
 
+    //TODO: Need to implement this soon.
+    private String mSessionJoinedPlayersIds;
+
     public Session() {
 
     }

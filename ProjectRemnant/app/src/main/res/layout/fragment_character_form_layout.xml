@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_traitrank"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/character_activity_form_traitRank"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_nickname"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/et_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/et_nickname" />
+
+    <EditText
+        android:id="@+id/et_traitrank"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="@string/character_activity_form_traitRank"
+        android:inputType="number"
+        android:maxLength="3"
+        app:layout_constraintEnd_toEndOf="@+id/tv_traitrank"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_traitrank"
+        app:layout_constraintTop_toBottomOf="@+id/tv_traitrank" />
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/character_activity_form_nickname"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_platform"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/et_platform"
+        app:layout_constraintTop_toBottomOf="@+id/et_platform" />
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="@string/character_activity_form_nickname"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/tv_nickname"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
+
+    <EditText
+        android:id="@+id/et_platform"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="@string/character_activity_form_platform"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/tv_platform"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_platform"
+        app:layout_constraintTop_toBottomOf="@+id/tv_platform" />
+
+    <TextView
+        android:id="@+id/tv_platform"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/character_activity_form_platform"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_gamertag"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_gamertag"
+        app:layout_constraintTop_toBottomOf="@+id/et_gamertag" />
+
+    <EditText
+        android:id="@+id/et_gamertag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:hint="@string/character_activity_form_gamertag"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/tv_gamertag"
+        app:layout_constraintStart_toStartOf="@+id/tv_gamertag"
+        app:layout_constraintTop_toBottomOf="@+id/tv_gamertag" />
+
+    <TextView
+        android:id="@+id/tv_gamertag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/character_activity_form_gamertag"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

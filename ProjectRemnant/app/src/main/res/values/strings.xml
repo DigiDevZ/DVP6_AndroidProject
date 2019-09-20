@@ -39,4 +39,12 @@
     <string name="item_details_activity_category_armor">Armor Set</string>
     <string name="item_details_activity_category_weapon">Weapon</string>
 
+
+    <string name="character_activity_menu_add">Add</string>
+    <string name="character_activity_form_gamertag">Gamertag:</string>
+    <string name="character_activity_form_platform">Platform:</string>
+    <string name="character_activity_form_nickname">Nickname:</string>
+    <string name="character_activity_form_traitRank">Trait Rank:</string>
+
+
 </resources>

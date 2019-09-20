@@ -15,13 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.R;
 
-import org.w3c.dom.Text;
-
 public class ItemDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ItemDetailsActivity";
 
-    //TODO: Need to figure out why my views are null.
+    //TODO: Set smaller text views that state "item bonus" and "unlock criteria" above the text boxes in the layout.
     public static final String EXTRA_ITEM = "EXTRA_ITEM";
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
 
@@ -91,7 +89,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     break;
                 case 5:
                     itemCategory = getString(R.string.item_details_activity_category_armor);
-                    
+
                     break;
                 default:
                     break;

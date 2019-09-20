@@ -20,10 +20,19 @@ public class ChecklistAdapter extends BaseAdapter {
 
     private final Context mContext;
     private final ArrayList<Item> mItems;
+    private final ArrayList<Boolean> mItemUnlockedState = new ArrayList<>();
 
     public ChecklistAdapter(Context _context, ArrayList<Item> _items) {
         mContext = _context;
         mItems = _items;
+
+        //TODO: When I have implemented the tracking of items on a user/character, i can check for the items that are owned.
+        for (int i = 0; i < mItems.size(); i++) {
+            mItemUnlockedState.add(false);
+        }
+        
+        
+
     }
 
 
@@ -49,7 +58,7 @@ public class ChecklistAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         //TODO: Later will need to add in functionality to check off items owned.
         ViewHolder vh;
@@ -65,6 +74,20 @@ public class ChecklistAdapter extends BaseAdapter {
 
         if(item != null) {
             vh.tv_itemName.setText(item.getItemName());
+
+            //To make sure that checkboxes stay checked/not checked correctly.
+            vh.cb_itemChecked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(((CheckBox) v).isChecked()) {
+                        mItemUnlockedState.set(position, true);
+                    }else {
+                        mItemUnlockedState.set(position, false);
+                    }
+                }
+            });
+            //Set the checkbox of the row to the state of the item owned array index.
+            vh.cb_itemChecked.setChecked(mItemUnlockedState.get(position));
         }
 
         return convertView;

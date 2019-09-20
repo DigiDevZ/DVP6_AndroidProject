@@ -128,27 +128,35 @@ public class SignupActivity extends AppCompatActivity {
     private void checkUserNameTaken() {
 
         final EditText et_userName = findViewById(R.id.et_username);
-        String userName = et_userName.getText().toString();
+        final String userName = et_userName.getText().toString();
 
-        mDatabase.child("users").child(userName).addValueEventListener(new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
+                if(!dataSnapshot.exists()) {
+                    //Username does not exist, system can create new account for user.
+                    createAccount();
+                    //Remove the event listener
+                    mDatabase.child("users").child(userName).removeEventListener(this);
+                }
+                else{
+                    //NOTE: Username taken bug should be fixed.
+                    Log.i(TAG, "onDataChange: user name taken");
                     //Username already exists
                     Toast.makeText(getApplicationContext(), "Username taken", Toast.LENGTH_SHORT).show();
                     et_userName.setText("");
-                }
-                else {
-                    //Username does not exist, system can create new account for user.
-                    createAccount();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Access to the database is down. Try again later.
+
             }
-        });
+        };
+
+        mDatabase.child("users").child(userName).addValueEventListener(listener);
     }
+
+
 
 }

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/checklist_menu_search"
-        android:title="@string/checklist_activity_menu_search"
-        android:icon="@drawable/ic_search"
+        android:id="@+id/character_menu_add"
+        android:title="@string/character_activity_menu_add"
+        android:icon="@drawable/ic_add"
         app:showAsAction="ifRoom"/>
 
 </menu>

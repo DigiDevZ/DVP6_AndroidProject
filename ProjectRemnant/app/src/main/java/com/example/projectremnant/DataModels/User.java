@@ -1,6 +1,8 @@
 package com.example.projectremnant.DataModels;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     public String mUserName;
     public String mUserPass;
@@ -25,6 +27,9 @@ public class User {
 
     }
 
+    public String getUserCharacters() {
+        return mUserCharacters;
+    }
     public void updateUserCharacters(String _updatedCharacters) {
         mUserCharacters = _updatedCharacters;
     }
