@@ -47,6 +47,12 @@ public class CharacterFormFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,15 +66,25 @@ public class CharacterFormFragment extends Fragment {
         return view;
     }
 
-    //TODO: Create the menu for this view and make sure the menu from the host activity is hidden.
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem item = menu.findItem(R.id.character_menu_add);
+        if(item != null) {
+            item.setVisible(false);
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.character_form_save_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.character_form_menu_save) {
+            saveCharacter();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,8 +94,8 @@ public class CharacterFormFragment extends Fragment {
         String nickname = mNickname.getText().toString();
         String traitrank = mTraitrank.getText().toString();
 
-        //TODO: Check the character data model.
-        Character character = new Character();
+        //Create the character and send it back to the activity.
+        Character character = new Character(traitrank, gamertag, nickname, platform);
         mListener.saveTapped(character);
     }
 }

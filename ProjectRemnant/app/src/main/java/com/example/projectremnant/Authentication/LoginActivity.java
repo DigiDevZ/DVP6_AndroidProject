@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectremnant.Character.CharacterActivity;
 import com.example.projectremnant.Checklist.ChecklistActivity;
+import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,8 +72,20 @@ public class LoginActivity extends AppCompatActivity {
                     if(password.equals(userPass)) {
                         //Launch the intent to the checklist screen.
                         Log.i(TAG, "onDataChange: login succesful.");
-                        Intent i = new Intent(getApplicationContext(), ChecklistActivity.class);
+
+                        //Remember to fix this after testing.
+
+                        long id = dataSnapshot.child("mUserId").getValue(Long.class);
+                        String name = dataSnapshot.child("mUserName").getValue(String.class);
+                        String characters = dataSnapshot.child("mUserCharacters").getValue(String.class);
+                        String pass = dataSnapshot.child("mUserPass").getValue(String.class);
+
+                        User user = new User(name, pass, characters, id);
+
+                        Intent i = new Intent(getApplicationContext(), CharacterActivity.class);
+                        i.putExtra(CharacterActivity.EXTRA_USER, user);
                         startActivity(i);
+                        //TODO: Will need to remove the listener after intent to the next activity.
                     }else {
                         //Toast that login failed, either username or password is wrong.
                         Log.i(TAG, "onDataChange: login failed, password expected: " + password + " found: " + userPass);

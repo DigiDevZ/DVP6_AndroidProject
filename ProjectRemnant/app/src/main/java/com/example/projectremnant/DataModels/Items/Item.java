@@ -68,4 +68,9 @@ public class Item implements Serializable {
         mItemId = _itemId;
     }
 
+    public static String itemIdListToJSON() {
+
+        return "";
+    }
+
 }

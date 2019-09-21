@@ -16,12 +16,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.projectremnant.Character.CharacterActivity;
 import com.example.projectremnant.Checklist.Fragments.CategoryFragment;
 import com.example.projectremnant.Checklist.Fragments.ChecklistFragment;
 import com.example.projectremnant.Contracts.ItemContracts;
+import com.example.projectremnant.DataModels.Character;
 import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.DataModels.Items.Weapon;
+import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.ItemInfo.ItemDetailsActivity;
 import com.example.projectremnant.R;
 import com.example.projectremnant.Sessions.SessionActivity;
@@ -45,11 +48,23 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("items");
     private ArrayList<Item>[] mItems = (ArrayList<Item>[]) new ArrayList[6];
 
+    //Variables for keeping track of user and character.
+    private User mUser;
+    private Character mCharacter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist_activity);
         setTitle(R.string.checklist_activity_title_default);
+
+
+        Intent starter = getIntent();
+        if(starter != null) {
+            mUser = (User) starter.getSerializableExtra(CharacterActivity.EXTRA_USER);
+            String characterString = mUser.getUserCharacters();
+            mCharacter = Character.fromJSONString(characterString);
+        }
 
         //TODO: Need to launch two fragments, the progress fragment and category fragment.
         // Category fragment is a gridview of 3 columns
