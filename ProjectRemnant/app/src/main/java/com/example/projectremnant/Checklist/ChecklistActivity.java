@@ -119,7 +119,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         frameLayout.setVisibility(View.VISIBLE);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_list, ChecklistFragment.newInstance(_items, _category), TAG_C)
+                .replace(R.id.fragment_container_list, ChecklistFragment.newInstance(_items, _category, mCharacter), TAG_C)
                 .addToBackStack("ChecklistFragment")
                 .commit();
     }

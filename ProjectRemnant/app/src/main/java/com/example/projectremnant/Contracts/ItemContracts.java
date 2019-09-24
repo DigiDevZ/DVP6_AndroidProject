@@ -55,5 +55,15 @@ public class ItemContracts {
     public static final String KEY_WEAPONSID = "weaponId";
     public static final String KEY_WEAPONSNAME = "weaponName";
 
+    /**
+     * Item category Keys
+     */
+
+    public static final String KEY_ARMORJSON = "armor";
+    public static final String KEY_AMULETJSON = "amulet";
+    public static final String KEY_WEAPONJSON = "weapon";
+    public static final String KEY_TRAITJSON = "trait";
+    public static final String KEY_MODJSON = "mod";
+    public static final String KEY_RINGJSON = "ring";
 
 }

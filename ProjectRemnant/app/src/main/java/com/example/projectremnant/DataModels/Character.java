@@ -3,7 +3,9 @@ package com.example.projectremnant.DataModels;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Character {
+import java.io.Serializable;
+
+public class Character implements Serializable {
 
     //Keys/Contracts
     public static final String KEY_TRAITRANK = "KEY_TRAITRANK";
@@ -61,9 +63,8 @@ public class Character {
     public String getItems() {
         return mItems;
     }
-    public void updateItems(int _category, long _itemId) {
-        //TODO: Create this functionality.
-        
+    public void updateItems(String _updatedItems) {
+        mItems = _updatedItems;
     }
 
     //TODO: Need to fill out this method.

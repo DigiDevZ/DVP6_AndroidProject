@@ -11,27 +11,53 @@ import android.widget.TextView;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class ChecklistAdapter extends BaseAdapter {
 
-    //TODO: This adapter will showcase each item from the selected category.
+
+
+    //This adapter will showcase each item from the selected category.
     private static final long BASE_ID = 0x0102;
 
     private final Context mContext;
     private final ArrayList<Item> mItems;
     private final ArrayList<Boolean> mItemUnlockedState = new ArrayList<>();
 
-    public ChecklistAdapter(Context _context, ArrayList<Item> _items) {
+    private CheckBoxChecked mListener;
+    public interface CheckBoxChecked {
+        public void checkboxTapped(int _position, boolean _state);
+    }
+
+    public ChecklistAdapter(Context _context, ArrayList<Item> _items, CheckBoxChecked _listener, String _itemsOwnedArray) {
         mContext = _context;
         mItems = _items;
+        mListener = _listener;
 
-        //TODO: When I have implemented the tracking of items on a user/character, i can check for the items that are owned.
+        //Establish the default boolean array state.
         for (int i = 0; i < mItems.size(); i++) {
             mItemUnlockedState.add(false);
         }
-        
-        
+
+        try {
+            JSONArray array = new JSONArray(_itemsOwnedArray);
+
+            //TODO: When I have implemented the tracking of items on a user/character, i can check for the items that are owned.
+            for (int i = 0; i < mItems.size(); i++) {
+                String itemId = String.valueOf(mItems.get(i).getItemId());
+                for (int j = 0; j < array.length(); j++) {
+                    if(itemId.equals(array.getString(j))) {
+                        mItemUnlockedState.add(i,true);
+                    }
+                }
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -88,6 +114,14 @@ public class ChecklistAdapter extends BaseAdapter {
             });
             //Set the checkbox of the row to the state of the item owned array index.
             vh.cb_itemChecked.setChecked(mItemUnlockedState.get(position));
+
+            vh.cb_itemChecked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox cb = (CheckBox)v;
+                    mListener.checkboxTapped(position, cb.isChecked());
+                }
+            });
         }
 
         return convertView;
