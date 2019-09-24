@@ -58,10 +58,10 @@ public class LoginActivity extends AppCompatActivity {
     //Check for the user with the entered username and then validate that, that user has the same password.
     private void loginTapped() {
 
-        String userName = mEt_userName.getText().toString();
+        final String userName = mEt_userName.getText().toString();
         final String password = mEt_password.getText().toString();
 
-        mDatabase.child(userName).addValueEventListener(new ValueEventListener() {
+        ValueEventListener loginListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
@@ -85,7 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(getApplicationContext(), CharacterActivity.class);
                         i.putExtra(CharacterActivity.EXTRA_USER, user);
                         startActivity(i);
-                        //TODO: Will need to remove the listener after intent to the next activity.
+                        //Need to remove the listener after intenting to the next activity.
+                        mDatabase.child(userName).removeEventListener(this);
                     }else {
                         //Toast that login failed, either username or password is wrong.
                         Log.i(TAG, "onDataChange: login failed, password expected: " + password + " found: " + userPass);
@@ -102,7 +103,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //Access to the database is down. Try again later.
             }
-        });
+        };
+
+        //Attach the listener.
+        mDatabase.child(userName).addValueEventListener(loginListener);
         //End of loginTapped.
     }
 

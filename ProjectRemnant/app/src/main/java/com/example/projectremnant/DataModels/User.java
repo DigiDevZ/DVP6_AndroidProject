@@ -17,10 +17,10 @@ public class User implements Serializable {
     public static final String KEY_CHARACTER3 = "KEY_CHARACTER3";
     public static final String KEY_CHARACTER4 = "KEY_CHARACTER4";
 
-    public String mUserName;
-    public String mUserPass;
-    public long mUserId;
-    public String mUserCharacters;
+    private String mUserName;
+    private String mUserPass;
+    private long mUserId;
+    private String mUserCharacters;
 
     public User() {
 
@@ -38,6 +38,10 @@ public class User implements Serializable {
 
     public static void encodePassword() {
 
+    }
+
+    public String getUserName() {
+        return mUserName;
     }
 
     public String getUserCharacters() {

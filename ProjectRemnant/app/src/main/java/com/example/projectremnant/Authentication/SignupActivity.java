@@ -107,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void createNewUserAccount(User _newUser) {
         //On successful user creation, update the user count and then intent to the home screen.
-        mDatabase.child("users").child(_newUser.mUserName).setValue(_newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("users").child(_newUser.getUserName()).setValue(_newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 mDatabase.child("userCount").setValue(mUserCount+1);

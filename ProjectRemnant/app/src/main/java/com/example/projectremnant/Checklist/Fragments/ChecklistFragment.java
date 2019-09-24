@@ -35,17 +35,18 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
 
     private Character mCharacter;
 
-    private OnItemClicked mListener;
-    public interface OnItemClicked {
+    private ChecklistFragmentListener mListener;
+    public interface ChecklistFragmentListener {
         void itemClicked(int _position, int _category);
+        void updateCharacter(Character _character);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if(context instanceof OnItemClicked) {
-            mListener = (OnItemClicked) context;
+        if(context instanceof ChecklistFragmentListener) {
+            mListener = (ChecklistFragmentListener) context;
         }
     }
 
@@ -78,24 +79,36 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
         }
 
         ArrayList<Item> items = (ArrayList<Item>) (getArguments() != null ? getArguments().getSerializable(ARG_ITEMS) : null);
-        if(items != null) {
+        if(items != null && character != null) {
 
             int category = (getArguments() != null ? getArguments().getInt(ARG_CATEGORY) : 0);
 
-            try {
-                //TODO: This will work but it needs stuff first. I am always creating a new character in this testing,
-                //  - so i either rough it out and finish the character screens and then update the database from the items screen and backward where needed,
-                // and bum rush the sessions portion of the app.
+            ArrayList<String> itemsOwnedArray = new ArrayList<>();
 
-                //TODO: get the list of items from the character JSON, the owned items, and then
-                JSONObject obj = new JSONObject(character.getItems());
-                JSONArray array = obj.getJSONArray(getItemCategoryKey(category));
-            }catch (JSONException e) {
-                e.printStackTrace();
+            String itemsOwned = character.getItems();
+            if(itemsOwned.equals("Empty")){
+                //Set the array to null so it doesn't check.
+                itemsOwnedArray = null;
+            }else {
+                try {
+                    //TODO: This will work but it needs stuff first. I am always creating a new character in this testing,
+                    //  - so i either rough it out and finish the character screens and then update the database from the items screen and backward where needed,
+                    // and bum rush the sessions portion of the app.
+
+                    //Get the list of items from the character JSON, the owned items, and then send them into the adapter.
+                    JSONObject obj = new JSONObject(character.getItems());
+                    JSONArray array = obj.getJSONArray(getItemCategoryKey(category));
+
+                    for (int i = 0; i < array.length(); i++) {
+                        String itemId = array.getString(i);
+                        itemsOwnedArray.add(itemId);
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
-            //ChecklistAdapter ca = new ChecklistAdapter(getActivity(), items, this);
-            //setListAdapter(ca);
+            ChecklistAdapter ca = new ChecklistAdapter(getActivity(), items, this, itemsOwnedArray);
+            setListAdapter(ca);
         }
     }
 
@@ -147,10 +160,10 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
                 itemsArray.remove(indexToRemove);
             }
 
-            //TODO: Testing loop.
-            for (int i = 0; i < itemsArray.length(); i++) {
-                Log.i(TAG, "addItemIdToOwnedObject: item id: " + itemsArray.getString(i));
-            }
+//            //TODO: Testing loop.
+//            for (int i = 0; i < itemsArray.length(); i++) {
+//                Log.i(TAG, "addItemIdToOwnedObject: item id: " + itemsArray.getString(i));
+//            }
 
             //Update the itemsObj and then send it out as a string to update the characters items.
             itemsObj.put(getItemCategoryKey(category), itemsArray);
@@ -204,11 +217,12 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
             Item checkedItem = items.get(_position);
             Log.i(TAG, "checkboxTapped: checked item: " + checkedItem.getItemName());
 
-            //TODO: --DONE--Need one more arg the character it self.
-            // will also need another listener method that updates the character on the activity.
+            //Update the items on the character, and then interface to the activity to have it update the update and user account.
             String updatedItems = addItemIdToOwnedObject(String.valueOf(checkedItem.getItemId()), mCharacter.getItems(), _state);
             mCharacter.updateItems(updatedItems);
 
+            //Update the character on the activity.
+            mListener.updateCharacter(mCharacter);
         }
     }
 

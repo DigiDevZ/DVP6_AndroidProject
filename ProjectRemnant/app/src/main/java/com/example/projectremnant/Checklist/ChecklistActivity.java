@@ -28,6 +28,7 @@ import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.ItemInfo.ItemDetailsActivity;
 import com.example.projectremnant.R;
 import com.example.projectremnant.Sessions.SessionActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener, ChecklistFragment.OnItemClicked {
+public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener, ChecklistFragment.ChecklistFragmentListener {
 
     //Tags for keeping track of the backstack of fragments.
     private static final String TAG = "ChecklistActivity.TAG";
@@ -46,11 +47,12 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     public static final String EXTRA_OPTION = "EXTRA_OPTION";
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("items");
-    private ArrayList<Item>[] mItems = (ArrayList<Item>[]) new ArrayList[6];
 
     //Variables for keeping track of user and character.
     private User mUser;
     private Character mCharacter;
+    private int mCharacterKey;
+    private ArrayList<Item>[] mItems = (ArrayList<Item>[]) new ArrayList[6];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,12 +65,8 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         if(starter != null) {
             mUser = (User) starter.getSerializableExtra(CharacterActivity.EXTRA_USER);
             mCharacter = (Character) starter.getSerializableExtra(CharacterActivity.EXTRA_CHARACTER);
+            mCharacterKey = starter.getIntExtra(CharacterActivity.EXTRA_KEY, 0);
         }
-
-        //TODO: Need to launch two fragments, the progress fragment and category fragment.
-        // Category fragment is a gridview of 3 columns
-        // Two Rows.
-
 
         //TODO: Need to update the database whenever a item is checked.
         //Grab all items from the database and put them in an array of array of item objects.
@@ -432,12 +430,30 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     
     @Override
     public void itemClicked(int _position, int _category) {
-        Log.i(TAG, "itemClicked: position: " + _position + " category: " + _category);
-
         //Get the item selected and the category of that item and then start the item details activity.
         Intent starter = new Intent(this, ItemDetailsActivity.class);
         starter.putExtra(ItemDetailsActivity.EXTRA_ITEM, mItems[_category].get(_position));
         starter.putExtra(ItemDetailsActivity.EXTRA_CATEGORY, _category);
         startActivity(starter);
+    }
+
+    @Override
+    public void updateCharacter(Character _character) {
+
+        //Update this character and then update the account in the database.
+        mCharacter = _character;
+
+        //Update the user account.
+        mUser.updateUserCharacters(mCharacter.toJSONString(), mCharacterKey);
+
+        //TODO: Update database.
+        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName());
+        userReference.child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.i(TAG, "onSuccess: Success updating user account.");
+            }
+        });
+
     }
 }

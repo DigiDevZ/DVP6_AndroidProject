@@ -41,7 +41,7 @@ public class CharacterGridFragment extends Fragment {
 
     private CharacterFragmentListener mListener;
     public interface CharacterFragmentListener {
-        void characterTapped(Character _character);
+        void characterTapped(Character _character, int _key);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CharacterGridFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(TAG, "onItemClick: Character selected: " + mCharacters.get(position).getNickname());
-                    mListener.characterTapped(mCharacters.get(position));
+                    mListener.characterTapped(mCharacters.get(position), position);
                 }
             });
         }

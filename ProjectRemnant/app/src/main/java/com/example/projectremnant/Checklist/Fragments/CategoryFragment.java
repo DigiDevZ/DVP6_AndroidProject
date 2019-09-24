@@ -69,8 +69,7 @@ public class CategoryFragment extends Fragment {
 
         ArrayList<Item>[] itemsArray = (ArrayList<Item>[]) (getArguments() != null ? getArguments().getSerializable(ARG_ITEMS) : null);
         if(itemsArray != null) {
-            //Do something.
-            Log.i(TAG, "onActivityCreated: Item size: " + itemsArray.length);
+            //Assign the items arrays to the mItems array of array lists.
             mItems[0] = itemsArray[0];
             mItems[1] = itemsArray[1];
             mItems[2] = itemsArray[2];

@@ -24,10 +24,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CharacterActivity extends AppCompatActivity implements CharacterFormFragment.OnSaveTapped, CharacterGridFragment.CharacterFragmentListener {
 
+    //TODO: Fix the bug that causes overriding of the second character.
+    // I think it is coming from the checking off of boxes so on the checklist activity. updateCharacter interface method.
+
     private static final String TAG = "CharacterActivity.TAG";
     
     public static final String EXTRA_USER = "EXTRA_USER";
     public static final String EXTRA_CHARACTER = "EXTRA_CHARACTER";
+    public static final String EXTRA_KEY = "EXTRA_KEY";
 
     private static final String TAG_FORM_FRAGMENT = "FormFragment";
 
@@ -99,10 +103,11 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
                 .commit();
     }
 
-    private void intentToChecklist(Character _character) {
+    private void intentToChecklist(Character _character, int _key) {
         Intent starter = new Intent(this, ChecklistActivity.class);
         starter.putExtra(EXTRA_USER, mUser);
         starter.putExtra(EXTRA_CHARACTER, _character);
+        starter.putExtra(EXTRA_KEY, _key);
         startActivity(starter);
     }
 
@@ -117,7 +122,7 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
         int characterCount = User.getUserCharacterCount(mUser.getUserCharacters());
         mUser.updateUserCharacters( _character.toJSONString(), characterCount + 1);
         //Update the users account.
-        mDatabase.child(mUser.mUserName).child("mUserCharacters").setValue(mUser.mUserCharacters).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child(mUser.getUserName()).child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "New Character Created and saved", Toast.LENGTH_SHORT).show();
@@ -130,9 +135,9 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
      */
 
     @Override
-    public void characterTapped(Character _character) {
+    public void characterTapped(Character _character, int _key) {
         //Launch the checklist activity with the character selected.
-        intentToChecklist(_character);
+        intentToChecklist(_character, _key);
     }
 
 }

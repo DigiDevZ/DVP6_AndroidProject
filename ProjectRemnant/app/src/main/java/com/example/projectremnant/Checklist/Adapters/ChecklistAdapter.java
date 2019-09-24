@@ -1,6 +1,7 @@
 package com.example.projectremnant.Checklist.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,9 @@ import android.widget.TextView;
 import com.example.projectremnant.DataModels.Items.Item;
 import com.example.projectremnant.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 public class ChecklistAdapter extends BaseAdapter {
-
-
 
     //This adapter will showcase each item from the selected category.
     private static final long BASE_ID = 0x0102;
@@ -29,36 +25,35 @@ public class ChecklistAdapter extends BaseAdapter {
 
     private CheckBoxChecked mListener;
     public interface CheckBoxChecked {
-        public void checkboxTapped(int _position, boolean _state);
+        void checkboxTapped(int _position, boolean _state);
     }
 
-    public ChecklistAdapter(Context _context, ArrayList<Item> _items, CheckBoxChecked _listener, String _itemsOwnedArray) {
+    public ChecklistAdapter(Context _context, ArrayList<Item> _items, CheckBoxChecked _listener, ArrayList<String> _itemsOwnedArray) {
         mContext = _context;
         mItems = _items;
         mListener = _listener;
 
-        //Establish the default boolean array state.
-        for (int i = 0; i < mItems.size(); i++) {
-            mItemUnlockedState.add(false);
-        }
-
-        try {
-            JSONArray array = new JSONArray(_itemsOwnedArray);
-
-            //TODO: When I have implemented the tracking of items on a user/character, i can check for the items that are owned.
+        if(_itemsOwnedArray == null) {
+            //Establish the default boolean array state.
+            for (int i = 0; i < mItems.size(); i++) {
+                mItemUnlockedState.add(false);
+            }
+        }else {
+            //Establish the default boolean array state.
+            for (int i = 0; i < mItems.size(); i++) {
+                mItemUnlockedState.add(false);
+            }
+            //Go through the items and find if any are owned, if they are update the state list.
             for (int i = 0; i < mItems.size(); i++) {
                 String itemId = String.valueOf(mItems.get(i).getItemId());
-                for (int j = 0; j < array.length(); j++) {
-                    if(itemId.equals(array.getString(j))) {
-                        mItemUnlockedState.add(i,true);
+                for (int j = 0; j < _itemsOwnedArray.size(); j++) {
+                    if(itemId.equals(_itemsOwnedArray.get(j))) {
+                        //Set the items unlocked state to true for the checkbox to get checked.
+                        mItemUnlockedState.set(i, true);
                     }
                 }
             }
-        }catch (JSONException e) {
-            e.printStackTrace();
         }
-
-
     }
 
 
@@ -86,7 +81,6 @@ public class ChecklistAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        //TODO: Later will need to add in functionality to check off items owned.
         ViewHolder vh;
         Item item = (Item) getItem(position);
 
