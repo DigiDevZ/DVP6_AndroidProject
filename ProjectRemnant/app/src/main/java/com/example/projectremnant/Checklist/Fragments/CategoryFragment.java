@@ -58,9 +58,9 @@ public class CategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = getLayoutInflater().inflate(R.layout.fragment_categories_layout, container, false);
-        mGridView = v.findViewById(R.id.gv_categories);
-        return v;
+        View view = getLayoutInflater().inflate(R.layout.fragment_categories_layout, container, false);
+        mGridView = view.findViewById(R.id.gv_categories);
+        return view;
     }
 
     @Override

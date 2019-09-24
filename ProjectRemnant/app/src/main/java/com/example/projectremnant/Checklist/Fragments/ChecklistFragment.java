@@ -86,16 +86,16 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
                 //TODO: This will work but it needs stuff first. I am always creating a new character in this testing,
                 //  - so i either rough it out and finish the character screens and then update the database from the items screen and backward where needed,
                 // and bum rush the sessions portion of the app.
-                // - or i BiOwArE mAgIc.
+
+                //TODO: get the list of items from the character JSON, the owned items, and then
                 JSONObject obj = new JSONObject(character.getItems());
                 JSONArray array = obj.getJSONArray(getItemCategoryKey(category));
             }catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
-            ChecklistAdapter ca = new ChecklistAdapter(getActivity(), items, this);
-            setListAdapter(ca);
+            //ChecklistAdapter ca = new ChecklistAdapter(getActivity(), items, this);
+            //setListAdapter(ca);
         }
     }
 

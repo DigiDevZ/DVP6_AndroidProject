@@ -62,14 +62,15 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         Intent starter = getIntent();
         if(starter != null) {
             mUser = (User) starter.getSerializableExtra(CharacterActivity.EXTRA_USER);
-            String characterString = mUser.getUserCharacters();
-            mCharacter = Character.fromJSONString(characterString);
+            mCharacter = (Character) starter.getSerializableExtra(CharacterActivity.EXTRA_CHARACTER);
         }
 
         //TODO: Need to launch two fragments, the progress fragment and category fragment.
         // Category fragment is a gridview of 3 columns
         // Two Rows.
 
+
+        //TODO: Need to update the database whenever a item is checked.
         //Grab all items from the database and put them in an array of array of item objects.
         gatherItems();
     }
@@ -143,13 +144,13 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                 long itemTotal = armorSetsCount + amuletsCount + modsCount + traitsCount + ringsCount + weaponsCount;
 
-                Log.i(TAG, "onDataChange: total items in database: " + itemTotal);
-                Log.i(TAG, "onDataChange: armor sets: " + armorSetsCount);
-                Log.i(TAG, "onDataChange: amulets: " + amuletsCount);
-                Log.i(TAG, "onDataChange: mods: " + modsCount);
-                Log.i(TAG, "onDataChange: traits: " + traitsCount);
-                Log.i(TAG, "onDataChange: rings: " + ringsCount);
-                Log.i(TAG, "onDataChange: weapons: " + weaponsCount);
+//                Log.i(TAG, "onDataChange: total items in database: " + itemTotal);
+//                Log.i(TAG, "onDataChange: armor sets: " + armorSetsCount);
+//                Log.i(TAG, "onDataChange: amulets: " + amuletsCount);
+//                Log.i(TAG, "onDataChange: mods: " + modsCount);
+//                Log.i(TAG, "onDataChange: traits: " + traitsCount);
+//                Log.i(TAG, "onDataChange: rings: " + ringsCount);
+//                Log.i(TAG, "onDataChange: weapons: " + weaponsCount);
 
                 //Gather the base items into their arrays.
                 gatherBaseItems(amuletsCount, modsCount, ringsCount, traitsCount);
@@ -197,7 +198,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                     Item amulet = new Item(amuletName, amuletId, amuletBonus, unlockCriteria, wikiPage);
                     amulets.add(amulet);
-                    Log.i(TAG, "onDataChange: Amulet " + amuletId + " added");
                 }
 
                 @Override
@@ -220,7 +220,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                     Item mod = new Item(modName, modId, modBonus, unlockCriteria, wikiPage);
                     mods.add(mod);
-                    Log.i(TAG, "onDataChange: Mod " + modId + " added");
                 }
 
                 @Override
@@ -243,7 +242,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                     Item ring = new Item(ringName, ringId, ringBonus, unlockCriteria, wikiPage);
                     rings.add(ring);
-                    Log.i(TAG, "onDataChange: Ring " + ringId + " added");
                 }
 
                 @Override
@@ -266,7 +264,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                     Item trait = new Item(traitName, traitId, traitBonus, unlockCriteria, wikiPage);
                     traits.add(trait);
-                    Log.i(TAG, "onDataChange: Trait " + traitId + " added");
                 }
 
                 @Override
@@ -305,7 +302,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
                     Weapon weapon = new Weapon(weaponName, unlockCriteria, weaponId, wikiPage, weaponCategory);
                     weapons.add(weapon);
-                    Log.i(TAG, "onDataChange: Weapon " + weaponId + " added");
                 }
 
                 @Override
@@ -333,7 +329,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
                     armor.getArmorPieces();
 
                     armorSets.add(armor);
-                    Log.i(TAG, "onDataChange: Armor Set " + armorSetId + " added");
                 }
 
                 @Override
@@ -385,8 +380,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
         builder.show();
     }
-
-
     private void launchSessionActivity(String _searchOption) {
         Intent starter = new Intent(this, SessionActivity.class);
         starter.putExtra(EXTRA_OPTION, _searchOption);
@@ -399,42 +392,36 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
     @Override
     public void armorsTapped(ArrayList<Item> _armorSets) {
-        Log.i(TAG, "armorsTapped: size: " + _armorSets.size());
         loadChecklist(5, _armorSets);
         setTitle(R.string.checklist_activity_title_armor);
     }
 
     @Override
     public void amuletsTapped(ArrayList<Item> _amulets) {
-        Log.i(TAG, "amuletsTapped: size: " + _amulets.size());
         loadChecklist(0, _amulets);
         setTitle(R.string.checklist_activity_title_amulets);
     }
 
     @Override
     public void weaponsTapped(ArrayList<Item> _weapons) {
-        Log.i(TAG, "weaponsTapped: size: " + _weapons.size());
         loadChecklist(4, _weapons);
         setTitle(R.string.checklist_activity_title_weapon);
     }
 
     @Override
     public void modsTapped(ArrayList<Item> _mods) {
-        Log.i(TAG, "modsTapped: size: " + _mods.size());
         loadChecklist(1, _mods);
         setTitle(R.string.checklist_activity_title_mod);
     }
 
     @Override
     public void traitsTapped(ArrayList<Item> _traits) {
-        Log.i(TAG, "traitsTapped: size: " + _traits.size());
         loadChecklist(3, _traits);
         setTitle(R.string.checklist_activity_title_trait);
     }
 
     @Override
     public void ringsTapped(ArrayList<Item> _rings) {
-        Log.i(TAG, "ringsTapped: size: " + _rings.size());
         loadChecklist(2, _rings);
         setTitle(R.string.checklist_activity_title_ring);
     }
