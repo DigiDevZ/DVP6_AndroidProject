@@ -26,6 +26,9 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
 
     //TODO: Fix the bug that causes overriding of the second character.
     // I think it is coming from the checking off of boxes so on the checklist activity. updateCharacter interface method.
+    // also look at the updateUserCharacters method in User class.
+
+    //TODO: Implement the text view for telling users there are no characters and they have to make one.
 
     private static final String TAG = "CharacterActivity.TAG";
     
@@ -122,7 +125,7 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
         int characterCount = User.getUserCharacterCount(mUser.getUserCharacters());
         mUser.updateUserCharacters( _character.toJSONString(), characterCount + 1);
         //Update the users account.
-        mDatabase.child(mUser.getUserName()).child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child(mUser.getUserName()).child("userCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "New Character Created and saved", Toast.LENGTH_SHORT).show();

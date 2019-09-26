@@ -10,39 +10,30 @@
         android:id="@+id/et_sessionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="128dp"
         android:ems="10"
+        android:maxLength="40"
+        android:hint="@string/session_activity_form_hint_name"
         android:inputType="textPersonName"
-        android:text="Session Name"
-        app:layout_constraintBottom_toTopOf="@+id/et_sessionDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_sessionDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:maxLength="140"
-        android:text="Session Description"
-        app:layout_constraintBottom_toTopOf="@+id/et_playerLimit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/et_playerLimit"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="64dp"
         android:ems="10"
-        android:inputType="number"
-        android:digits="23"
-        android:maxLength="1"
-        app:layout_constraintBottom_toTopOf="@+id/btn_create"
-        app:layout_constraintEnd_toEndOf="@+id/btn_create"
-        app:layout_constraintStart_toStartOf="@+id/btn_create" />
+        android:hint="@string/session_activity_form_hint_description"
+        android:maxLength="140"
+        android:textAlignment="textStart"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_playerLimit"
+        app:layout_constraintEnd_toEndOf="@+id/et_sessionName"
+        app:layout_constraintStart_toStartOf="@+id/et_sessionName"
+        app:layout_constraintTop_toBottomOf="@+id/et_sessionName" />
 
     <Button
         android:id="@+id/btn_create"
@@ -53,4 +44,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner_playerLimit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:entries="@array/session_playerLimit_spinnerOptions"
+        android:prompt="@string/session_activity_form_hint_playerlimit"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btn_create"
+        app:layout_constraintEnd_toEndOf="@+id/btn_create"
+        app:layout_constraintStart_toStartOf="@+id/btn_create" />
 </androidx.constraintlayout.widget.ConstraintLayout>

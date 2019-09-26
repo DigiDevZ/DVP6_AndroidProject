@@ -74,7 +74,7 @@ public class SignupActivity extends AppCompatActivity {
 
         if(validPassword) {
             updateUserCount();
-            User newUser = new User(userName, password, "Empty", mUserCount);
+            User newUser = new User(userName, password, "Empty", mUserCount, "Empty");
             createNewUserAccount(newUser);
             Log.i(TAG, "createAccount: users: " + mUserCount);
         }else {

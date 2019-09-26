@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
+    //TODO: Have to reupdate the keys for the login and sign in process ASAP
     //Check for the user with the entered username and then validate that, that user has the same password.
     private void loginTapped() {
 
@@ -66,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     //User exists
-                    String userPass = dataSnapshot.child("mUserPass").getValue(String.class);
+                    String userPass = dataSnapshot.child("userPass").getValue(String.class);
                     Log.i(TAG, "onDataChange: password: " + userPass);
 
                     if(password.equals(userPass)) {
@@ -75,12 +77,14 @@ public class LoginActivity extends AppCompatActivity {
 
                         //Remember to fix this after testing.
 
-                        long id = dataSnapshot.child("mUserId").getValue(Long.class);
-                        String name = dataSnapshot.child("mUserName").getValue(String.class);
-                        String characters = dataSnapshot.child("mUserCharacters").getValue(String.class);
-                        String pass = dataSnapshot.child("mUserPass").getValue(String.class);
+                        long id = dataSnapshot.child("userId").getValue(Long.class);
+                        String name = dataSnapshot.child("userName").getValue(String.class);
+                        String characters = dataSnapshot.child("userCharacters").getValue(String.class);
+                        String pass = dataSnapshot.child("userPass").getValue(String.class);
+                        String joinedSessionIds = dataSnapshot.child("joinedSessionsIds").getValue(String.class);
+                        //TODO: Grab the session ids from database.
 
-                        User user = new User(name, pass, characters, id);
+                        User user = new User(name, pass, characters, id, joinedSessionIds);
 
                         Intent i = new Intent(getApplicationContext(), CharacterActivity.class);
                         i.putExtra(CharacterActivity.EXTRA_USER, user);

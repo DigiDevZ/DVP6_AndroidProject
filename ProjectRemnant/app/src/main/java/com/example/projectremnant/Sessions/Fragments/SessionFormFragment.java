@@ -2,11 +2,14 @@ package com.example.projectremnant.Sessions.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +19,11 @@ import com.example.projectremnant.R;
 
 public class SessionFormFragment extends Fragment {
 
+    private static final String TAG = "SessionFormFragment";
 
     private EditText mSessionName;
     private EditText mSessionDescription;
-    private EditText mSessionLimit;
+    private String mPlayerLimitSelected;
 
     private OnCreateTapped mListener;
     public interface OnCreateTapped{
@@ -51,7 +55,26 @@ public class SessionFormFragment extends Fragment {
 
         mSessionName = view.findViewById(R.id.et_sessionName);
         mSessionDescription = view.findViewById(R.id.et_sessionDescription);
-        mSessionLimit = view.findViewById(R.id.et_playerLimit);
+        Spinner mSessionLimit = view.findViewById(R.id.spinner_playerLimit);
+        mSessionLimit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String value = "";
+                if(position == 0){
+                    value = "2";
+                    mPlayerLimitSelected = "2";
+                }else if(position == 1) {
+                    value = "3";
+                    mPlayerLimitSelected = "3";
+                }
+                Log.i(TAG, "onItemSelected: value of spinner: " + value);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Do nothing.
+            }
+        });
 
         Button btn_create = view.findViewById(R.id.btn_create);
         btn_create.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +89,10 @@ public class SessionFormFragment extends Fragment {
 
     private void getSessionInfoFromViews() {
 
+        String name = mSessionName.getText().toString();
+        String description = mSessionDescription.getText().toString();
 
-        //mListener.createTapped();
+        mListener.createTapped(name, description, mPlayerLimitSelected);
     }
 
 }

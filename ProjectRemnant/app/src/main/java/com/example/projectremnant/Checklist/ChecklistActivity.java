@@ -60,7 +60,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         setContentView(R.layout.checklist_activity);
         setTitle(R.string.checklist_activity_title_default);
 
-
         Intent starter = getIntent();
         if(starter != null) {
             mUser = (User) starter.getSerializableExtra(CharacterActivity.EXTRA_USER);
@@ -68,7 +67,6 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
             mCharacterKey = starter.getIntExtra(CharacterActivity.EXTRA_KEY, 0);
         }
 
-        //TODO: Need to update the database whenever a item is checked.
         //Grab all items from the database and put them in an array of array of item objects.
         gatherItems();
     }
@@ -381,6 +379,8 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
     private void launchSessionActivity(String _searchOption) {
         Intent starter = new Intent(this, SessionActivity.class);
         starter.putExtra(EXTRA_OPTION, _searchOption);
+        starter.putExtra(SessionActivity.EXTRA_CHARACTER, mCharacter);
+        starter.putExtra(CharacterActivity.EXTRA_USER, mUser);
         startActivity(starter);
     }
 
@@ -434,6 +434,12 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         Intent starter = new Intent(this, ItemDetailsActivity.class);
         starter.putExtra(ItemDetailsActivity.EXTRA_ITEM, mItems[_category].get(_position));
         starter.putExtra(ItemDetailsActivity.EXTRA_CATEGORY, _category);
+
+        starter.putExtra(CharacterActivity.EXTRA_CHARACTER, mCharacter);
+        starter.putExtra(CharacterActivity.EXTRA_USER, mUser);
+        starter.putExtra(CharacterActivity.EXTRA_KEY, mCharacterKey);
+
+
         startActivity(starter);
     }
 
@@ -446,7 +452,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         //Update the user account.
         mUser.updateUserCharacters(mCharacter.toJSONString(), mCharacterKey);
 
-        //TODO: Update database.
+        //Update database.
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName());
         userReference.child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

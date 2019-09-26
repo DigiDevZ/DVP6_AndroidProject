@@ -13,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        android:text="View WikiPage"
+        android:text="@string/item_details_activity_button_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -23,7 +23,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Item Category"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemName"
@@ -34,9 +33,8 @@
         android:id="@+id/tv_itemBonus"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="24dp"
-        android:text="Item Bonus"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline_Horizontal"
@@ -51,7 +49,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
-        android:text="Item Unlock Criteria"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_viewWiki"
@@ -66,7 +63,6 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Item Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
         android:textStyle="italic"
@@ -85,8 +81,31 @@
         android:id="@+id/cb_itemOwned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Owned"
+        android:text="@string/item_details_activity_checkbox_itemOwned"
         app:layout_constraintBottom_toBottomOf="@+id/tv_itemUnlockCriteria"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemBonus"
         app:layout_constraintTop_toTopOf="@+id/tv_itemUnlockCriteria" />
+
+    <TextView
+        android:id="@+id/tv_titleItemBonus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/item_details_activity_title_itemBonus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/tv_itemBonus"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemBonus"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemBonus" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="@string/item_details_activity_title_itemCriteria"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/tv_itemUnlockCriteria"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemUnlockCriteria"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemUnlockCriteria" />
 </androidx.constraintlayout.widget.ConstraintLayout>

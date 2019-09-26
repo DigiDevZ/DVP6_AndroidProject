@@ -2,6 +2,7 @@ package com.example.projectremnant.DataModels;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,18 +22,24 @@ public class User implements Serializable {
     private String mUserPass;
     private long mUserId;
     private String mUserCharacters;
+    private String mJoinedSessionsIds;
+
+
+    private ArrayList<String> mJoinedSessions;
 
     public User() {
 
     }
 
-    public User(String _userName, String _userPass, String _userCharacters, long _userId) {
+    public User(String _userName, String _userPass, String _userCharacters, long _userId, String _joinedSessionIds) {
         mUserName = _userName;
 
         //TODO: Need to encode password on creation and decode whenever authenticating.
         mUserPass = _userPass;
         mUserId = _userId;
         mUserCharacters = _userCharacters;
+        mJoinedSessionsIds = _joinedSessionIds;
+        mJoinedSessions = new ArrayList<>();
     }
 
 
@@ -40,8 +47,35 @@ public class User implements Serializable {
 
     }
 
+    public ArrayList<String> getJoinedSessions() {
+        return mJoinedSessions;
+    }
+    public void setJoinedSessions(ArrayList<String> _sessionIds) {
+        mJoinedSessions = _sessionIds;
+    }
+    public void updateJoinedSessions(String _sessionId) {
+        mJoinedSessions.add(_sessionId);
+    }
+
     public String getUserName() {
         return mUserName;
+    }
+
+    public String getJoinedSessionsIds() {
+        JSONArray array = new JSONArray();
+        for (int i = 0; i < mJoinedSessions.size(); i++) {
+            array.put(mJoinedSessions.get(i));
+        }
+        return array.toString();
+    }
+
+
+    public String getUserPass() {
+        return  mUserPass;
+    }
+
+    public Long getUserId() {
+        return mUserId;
     }
 
     public String getUserCharacters() {

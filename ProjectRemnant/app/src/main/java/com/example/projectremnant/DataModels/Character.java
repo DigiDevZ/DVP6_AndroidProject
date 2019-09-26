@@ -109,5 +109,9 @@ public class Character implements Serializable {
         return null;
     }
 
+    public String getCharacterForSession() {
+        return mGamertag + "/" + mPlatform + "/" + mTraitRank;
+    }
+
 
 }

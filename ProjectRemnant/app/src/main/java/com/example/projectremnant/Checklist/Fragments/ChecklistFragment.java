@@ -26,9 +26,6 @@ import java.util.ArrayList;
 
 public class ChecklistFragment extends ListFragment implements ChecklistAdapter.CheckBoxChecked {
 
-    private static final String TAG = "ChecklistFragment.TAG";
-    //TODO: Will need to add an interface method for checking the state of the checkbox when it is checked.
-
     private static final String ARG_ITEMS = "items";
     private static final String ARG_CATEGORY = "category";
     private static final String ARG_CHARACTER = "character";
@@ -91,9 +88,7 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
                 itemsOwnedArray = null;
             }else {
                 try {
-                    //TODO: This will work but it needs stuff first. I am always creating a new character in this testing,
-                    //  - so i either rough it out and finish the character screens and then update the database from the items screen and backward where needed,
-                    // and bum rush the sessions portion of the app.
+                    //TODO: I could possibly make a method of this as well.
 
                     //Get the list of items from the character JSON, the owned items, and then send them into the adapter.
                     JSONObject obj = new JSONObject(character.getItems());
@@ -208,14 +203,10 @@ public class ChecklistFragment extends ListFragment implements ChecklistAdapter.
     
     @Override
     public void checkboxTapped(int _position, boolean _state) {
-        Log.i(TAG, "checkboxTapped: position: " + _position + " state: " + _state);
-        //TODO: Get the items string of ids, and then turn it into JSON, and add a item into a new slot or array.
-        // THis will happen in this method, and then update the users characters value from the database.
         ArrayList<Item> items = (ArrayList<Item>) (getArguments() != null ? getArguments().getSerializable(ARG_ITEMS) : null);
         if(items != null) {
 
             Item checkedItem = items.get(_position);
-            Log.i(TAG, "checkboxTapped: checked item: " + checkedItem.getItemName());
 
             //Update the items on the character, and then interface to the activity to have it update the update and user account.
             String updatedItems = addItemIdToOwnedObject(String.valueOf(checkedItem.getItemId()), mCharacter.getItems(), _state);
