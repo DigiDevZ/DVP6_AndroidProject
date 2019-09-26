@@ -61,6 +61,7 @@ public class User implements Serializable {
         return mUserName;
     }
 
+    //TODO: This is only saving the one session, so i need to figure out why there is only 1 being saved in this list.
     public String getJoinedSessionsIds() {
         JSONArray array = new JSONArray();
         for (int i = 0; i < mJoinedSessions.size(); i++) {

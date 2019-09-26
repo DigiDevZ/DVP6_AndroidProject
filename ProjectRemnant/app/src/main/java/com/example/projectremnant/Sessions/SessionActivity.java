@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -25,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 public class SessionActivity extends AppCompatActivity implements SessionFormFragment.OnCreateTapped {
 
     private static final String TAG = "SessionActivity.TAG";
@@ -36,8 +35,6 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     DatabaseReference mDatabaseSessionCountRef = FirebaseDatabase.getInstance().getReference().child("sessionCount");
     DatabaseReference mDatabaseUserSessions = FirebaseDatabase.getInstance().getReference().child("users");
 
-
-    //TODO: Need to get the character the user is on from the intent.
     private Character mCharacter;
     private User mUser;
 
@@ -46,13 +43,31 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_activity);
 
+        Button btn_available = findViewById(R.id.btn_available);
+        btn_available.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAvailableGroupsFragment();
+            }
+        });
+
+        Button btn_joined = findViewById(R.id.btn_joined);
+        btn_joined.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchJoinedGroupsFragment();
+            }
+        });
+
+
         Intent starter = getIntent();
         if(starter != null) {
             mUser = (User) starter.getSerializableExtra(CharacterActivity.EXTRA_USER);
             mCharacter = (Character) starter.getSerializableExtra(EXTRA_CHARACTER);
             String searchOption = starter.getStringExtra(ChecklistActivity.EXTRA_OPTION);
             if(searchOption.equals("search")){
-                //TODO: Launch the available sessions lists fragments.
+                //Launch the available sessions lists fragments.
+                launchAvailableGroupsFragment();
             }else if(searchOption.equals("create")){
                 //Launch the session form fragment.
                 launchFormFragment();
@@ -68,12 +83,24 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
         FrameLayout fl_list = findViewById(R.id.fragment_container_list);
         fl_list.setVisibility(View.GONE);
 
+        Button btn_available = findViewById(R.id.btn_available);
+        btn_available.setVisibility(View.GONE);
+
+        Button btn_joined = findViewById(R.id.btn_joined);
+        btn_joined.setVisibility(View.GONE);
+
         FrameLayout fl_container = findViewById(R.id.fragment_container);
         fl_container.setVisibility(View.VISIBLE);
     }
     private void hideFormFrameLayouts() {
         FrameLayout fl_list = findViewById(R.id.fragment_container_list);
         fl_list.setVisibility(View.VISIBLE);
+
+        Button btn_available = findViewById(R.id.btn_available);
+        btn_available.setVisibility(View.VISIBLE);
+
+        Button btn_joined = findViewById(R.id.btn_joined);
+        btn_joined.setVisibility(View.VISIBLE);
 
         FrameLayout fl_container = findViewById(R.id.fragment_container);
         fl_container.setVisibility(View.GONE);
@@ -92,8 +119,9 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     }
 
     private void launchJoinedGroupsFragment() {
+        //TODO: Bug where the joined sessions are not loaded unless the user creates one in the app.
         hideFormFrameLayouts();
-        //TODO: Work on next: Create a list fragment, and adapter to show off the joined groups, the list fragment will be used for both joined and available groups.
+        setTitle("Joined Sessions");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_list, SessionListFragment.newInstance(true, mUser))
                 .commit();
@@ -101,6 +129,7 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
 
     private void launchAvailableGroupsFragment() {
         hideFormFrameLayouts();
+        setTitle("Available Sessions");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_list, SessionListFragment.newInstance(false, mUser))
                 .commit();
@@ -142,7 +171,6 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
             @Override
             public void onSuccess(Void aVoid) {
                 updateSessionsCount();
-                //launchJoinedGroupsFragment();
                 mUser.updateJoinedSessions(session.getSessionId());
                 //If i need to i can add a success listener to this.
                 mDatabaseUserSessions.child(mUser.getUserName()).child("joinedSessionsIds").setValue(mUser.getJoinedSessionsIds());

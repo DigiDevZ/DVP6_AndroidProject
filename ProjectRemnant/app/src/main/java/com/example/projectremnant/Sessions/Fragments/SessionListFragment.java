@@ -15,6 +15,7 @@ import androidx.fragment.app.ListFragment;
 import com.example.projectremnant.DataModels.Session;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
+import com.example.projectremnant.Sessions.Adapter.SessionAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,9 +79,10 @@ public class SessionListFragment extends ListFragment {
             Log.i(TAG, "onActivityCreated: looking for joined groups: " + joined);
             ArrayList<String> joinedSessions = mUser.getJoinedSessions();
             getSessionsFromJoinedSessionsIds(joinedSessions);
-
         }else {
             Log.i(TAG, "onActivityCreated: looking for joined groups: " + joined);
+            //Todo get all the sessions in the sessions part of the database.
+            getSessionsFromAvailableSessions();
         }
     }
 
@@ -90,6 +92,10 @@ public class SessionListFragment extends ListFragment {
         //mListener.sessionClicked(mSessions.get(position));
     }
 
+    private void updateList() {
+        SessionAdapter sa = new SessionAdapter(getContext(), mSessions);
+        setListAdapter(sa);
+    }
 
     private void getSessionsFromJoinedSessionsIds(ArrayList<String> _sessionIds) {
 
@@ -97,9 +103,14 @@ public class SessionListFragment extends ListFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String sessionDetails = dataSnapshot.getValue(String.class);
-                Log.i(TAG, "onDataChange: session details: " + sessionDetails);
-                //TODO: Create the session based off of the details and then remove the listener, by using the id.
-
+                //Create the session based off of the details and then remove the listener, by using the id.
+                Session session = Session.fromJSONString(sessionDetails);
+                if(session != null) {
+                    Log.i(TAG, "onDataChange: adding session to list.");
+                    mSessions.add(session);
+                    updateList();
+                    mDatabase.child(session.getSessionId()).removeEventListener(this);
+                }
             }
 
             @Override
@@ -108,11 +119,36 @@ public class SessionListFragment extends ListFragment {
             }
         };
 
-
         //Getting whatever session is joined and then making it for the list view.
         for (int i = 0; i < _sessionIds.size(); i++) {
             mDatabase.child(_sessionIds.get(i)).addValueEventListener(listener);
         }
     }
 
+    private void getSessionsFromAvailableSessions() {
+
+        ValueEventListener sessionListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    //The child now holds the session details.
+                    String sessionDetails = child.getValue(String.class);
+                    //Create the session from the details and then
+                    Session session = Session.fromJSONString(sessionDetails);
+                    if(session != null) {
+                        mSessions.add(session);
+                    }
+                }
+                updateList();
+                mDatabase.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabase.addValueEventListener(sessionListener);
+    }
 }

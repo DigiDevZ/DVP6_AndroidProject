@@ -1,11 +1,15 @@
 package com.example.projectremnant.DataModels;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.UUID;
 
 public class Session {
+
+    private static final String TAG = "Session.TAG";
 
     public static final String KEY_NAME = "KEY_NAME";
     public static final String KEY_ID = "KEY_ID";
@@ -42,6 +46,18 @@ public class Session {
         //mSessionCreated = _sessionCreated;
     }
 
+    public Session(String _sessionName, int _sessionLimit, String _sessionCharacters, String _sessionDescription, String _sessionId) {
+
+        //Assign the regular properties.
+        mSessionName = _sessionName;
+        mSessionLimit = _sessionLimit;
+        mSessionCharacters = _sessionCharacters;
+        mSessionDescription = _sessionDescription;
+
+        //For this constructor the session id is already made so I just assign it to the member variable.
+        mSessionId = _sessionId;
+    }
+
 
     public String getSessionId() {
         return mSessionId;
@@ -76,8 +92,22 @@ public class Session {
     public String toJSONString() {
         return null;
     }
-    public static void fromJSONString() {
+    public static Session fromJSONString(String _sessionDetailsJSON) {
 
+        try {
+            JSONObject sessionObj = new JSONObject(_sessionDetailsJSON);
+            String name = sessionObj.getString(KEY_NAME);
+            String id = sessionObj.getString(KEY_ID);
+            String description = sessionObj.getString(KEY_DESCRIPTION);
+            String characters = sessionObj.getString(KEY_CHARACTERSJOINED);
+            int limit = sessionObj.getInt(KEY_LIMIT);
+
+            return new Session(name, limit, characters, description, id);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public String getSessionDetails() {
