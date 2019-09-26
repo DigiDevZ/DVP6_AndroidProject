@@ -60,6 +60,8 @@ public class CharacterGridFragment extends Fragment {
         return view;
     }
 
+    //TODO: Needs to update the grid from the character activity and close on save tapped.
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -77,7 +79,7 @@ public class CharacterGridFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(TAG, "onItemClick: Character selected: " + mCharacters.get(position).getNickname());
-                    mListener.characterTapped(mCharacters.get(position), position);
+                    mListener.characterTapped(mCharacters.get(position), position + 1);
                 }
             });
         }

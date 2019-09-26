@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectremnant.Character.CharacterActivity;
-import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -106,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    private void createNewUserAccount(User _newUser) {
+    private void createNewUserAccount(final User _newUser) {
         //On successful user creation, update the user count and then intent to the home screen.
         mDatabase.child("users").child(_newUser.getUserName()).setValue(_newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -114,6 +113,7 @@ public class SignupActivity extends AppCompatActivity {
                 mDatabase.child("userCount").setValue(mUserCount+1);
                 //Intent to the checklist screen.
                 Intent i = new Intent(getApplicationContext(), CharacterActivity.class);
+                i.putExtra(CharacterActivity.EXTRA_USER, _newUser);
                 startActivity(i);
             }
         }).addOnFailureListener(new OnFailureListener() {

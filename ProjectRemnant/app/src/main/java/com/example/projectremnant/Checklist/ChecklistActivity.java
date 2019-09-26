@@ -39,6 +39,10 @@ import java.util.ArrayList;
 
 public class ChecklistActivity extends AppCompatActivity implements CategoryFragment.CategoryFragmentListener, ChecklistFragment.ChecklistFragmentListener {
 
+    //TODO: Checklist package is good to go and signed off for final review.
+
+    public static final int REQUEST_ITEMDETAILS = 1;
+
     //Tags for keeping track of the backstack of fragments.
     private static final String TAG = "ChecklistActivity.TAG";
     private static final String TAG_C = "FragmentC";
@@ -99,6 +103,21 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         }else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_ITEMDETAILS && resultCode == RESULT_OK) {
+            if(data != null) {
+                mCharacter = (Character) data.getSerializableExtra(CharacterActivity.EXTRA_CHARACTER);
+                mUser = (User) data.getSerializableExtra(CharacterActivity.EXTRA_USER);
+                int category = data.getIntExtra(ItemDetailsActivity.EXTRA_CATEGORY, 0);
+                loadChecklist(category, mItems[category]);
+            }
+        }
+
     }
 
     /**
@@ -439,8 +458,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
         starter.putExtra(CharacterActivity.EXTRA_USER, mUser);
         starter.putExtra(CharacterActivity.EXTRA_KEY, mCharacterKey);
 
-
-        startActivity(starter);
+        startActivityForResult(starter, REQUEST_ITEMDETAILS);
     }
 
     @Override
@@ -454,7 +472,7 @@ public class ChecklistActivity extends AppCompatActivity implements CategoryFrag
 
         //Update database.
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName());
-        userReference.child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        userReference.child("userCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.i(TAG, "onSuccess: Success updating user account.");

@@ -46,13 +46,31 @@ public class User implements Serializable {
     }
 
     public ArrayList<String> getJoinedSessions() {
+        mJoinedSessions.clear();
+        try {
+            JSONArray sessionIdArray = new JSONArray(mJoinedSessionsIds);
+            for (int i = 0; i < sessionIdArray.length(); i++) {
+                mJoinedSessions.add((String) sessionIdArray.get(i));
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
         return mJoinedSessions;
     }
     public void setJoinedSessions(ArrayList<String> _sessionIds) {
         mJoinedSessions = _sessionIds;
     }
     public void updateJoinedSessions(String _sessionId) {
-        mJoinedSessions.add(_sessionId);
+        try {
+            JSONArray array = new JSONArray(mJoinedSessionsIds);
+            array.put(_sessionId);
+            mJoinedSessionsIds = array.toString();
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mJoinedSessions = getJoinedSessions();
+
     }
 
     public String getUserName() {

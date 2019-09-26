@@ -15,7 +15,6 @@ import com.example.projectremnant.DataModels.Character;
 import com.example.projectremnant.DataModels.Session;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,11 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 public class SessionDetailsActivity extends AppCompatActivity {
 
-    private static final String TAG = "SessionDetailsActivity";
+    private static final String TAG = "SessionDetailsAct.TAG";
 
     public static final String EXTRA_SESSION = "session";
 
@@ -47,10 +44,10 @@ public class SessionDetailsActivity extends AppCompatActivity {
             mSession = (Session) starter.getSerializableExtra(EXTRA_SESSION);
             updateUI();
 
-            final Button btn_join = findViewById(R.id.btn_joinSession);
+            Button btn_join = findViewById(R.id.btn_joinSession);
             btn_join.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     //Add the session id to the users joined sessions and then add the users character to the session.
                     String characters = mSession.getSessionCharacters();
 
@@ -70,23 +67,37 @@ public class SessionDetailsActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 //Dirty way to stop the user but it is needed for now.
-                                btn_join.setClickable(false);
+                                v.setClickable(false);
                             }
                         });
+                        mSession = session;
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     mUser.updateJoinedSessions(mSession.getSessionId());
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName()).child("joinedSessionIds");
-                    userRef.setValue(mUser.getJoinedSessionsIds());
+                    Log.i(TAG, "onClick: " + mUser.getJoinedSessionsIds());
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName()).child("joinedSessionsIds");
+                    userRef.setValue(mUser.getJoinedSessionsIds()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i(TAG, "onSuccess: success");
+                        }
+                    });
                 }
             });
         }
-
-
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent finish = new Intent();
+        finish.putExtra(CharacterActivity.EXTRA_USER, mUser);
+        finish.putExtra(CharacterActivity.EXTRA_CHARACTER, mCharacter);
+        setResult(RESULT_OK, finish);
+        this.finishActivity(SessionActivity.REQUEST_SESSIONDETAILS);
+        super.onBackPressed();
+    }
 
     private void updateUI() {
         TextView tv_name = findViewById(R.id.tv_name);

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.ListFragment;
 
+import com.example.projectremnant.DataModels.Character;
 import com.example.projectremnant.DataModels.Session;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
@@ -30,10 +31,12 @@ public class SessionListFragment extends ListFragment {
     
     private static final String ARG_JOINED = "joined";
     private static final String ARG_USER = "user";
+    private static final String ARG_CHARACTER = "character";
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("sessions");
 
     private User mUser;
+    private Character mCharacter;
 
     private ArrayList<Session> mSessions = new ArrayList<>();
 
@@ -51,11 +54,12 @@ public class SessionListFragment extends ListFragment {
         }
     }
 
-    public static SessionListFragment newInstance(boolean _joined, User _user) {
+    public static SessionListFragment newInstance(boolean _joined, User _user, Character _character) {
         
         Bundle args = new Bundle();
         args.putBoolean(ARG_JOINED, _joined);
         args.putSerializable(ARG_USER, _user);
+        args.putSerializable(ARG_CHARACTER, _character);
 
         SessionListFragment fragment = new SessionListFragment();
         fragment.setArguments(args);
@@ -73,17 +77,13 @@ public class SessionListFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         mUser = (User) (getArguments() != null ? getArguments().getSerializable(ARG_USER) : null);
+        mCharacter = (Character) (getArguments() != null ? getArguments().getSerializable(ARG_CHARACTER) : null);
+    }
 
-        boolean joined = (getArguments() != null ? getArguments().getBoolean(ARG_JOINED) : null);
-        if(joined) {
-            Log.i(TAG, "onActivityCreated: looking for joined groups: " + joined);
-            ArrayList<String> joinedSessions = mUser.getJoinedSessions();
-            getSessionsFromJoinedSessionsIds(joinedSessions);
-        }else {
-            Log.i(TAG, "onActivityCreated: looking for joined groups: " + joined);
-            //Todo get all the sessions in the sessions part of the database.
-            getSessionsFromAvailableSessions();
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        loadData();
     }
 
     @Override
@@ -92,13 +92,24 @@ public class SessionListFragment extends ListFragment {
         mListener.sessionClicked(mSessions.get(position));
     }
 
+    private void loadData() {
+        mSessions.clear();
+        boolean joined = (getArguments() != null ? getArguments().getBoolean(ARG_JOINED) : null);
+        if(joined) {
+            ArrayList<String> joinedSessions = mUser.getJoinedSessions();
+            getSessionsFromJoinedSessionsIds(joinedSessions);
+        }else {
+            //Get all sessions from the available sessions list. If a session is joined by the user do not add it.
+            getSessionsFromAvailableSessions();
+        }
+    }
+
     private void updateList() {
         SessionAdapter sa = new SessionAdapter(getContext(), mSessions);
         setListAdapter(sa);
     }
 
     private void getSessionsFromJoinedSessionsIds(ArrayList<String> _sessionIds) {
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -126,29 +137,48 @@ public class SessionListFragment extends ListFragment {
     }
 
     private void getSessionsFromAvailableSessions() {
+        if(mUser != null) {
+            final ArrayList<String> joinedSessions = mUser.getJoinedSessions();
 
-        ValueEventListener sessionListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    //The child now holds the session details.
-                    String sessionDetails = child.getValue(String.class);
-                    //Create the session from the details and then
-                    Session session = Session.fromJSONString(sessionDetails);
-                    if(session != null) {
-                        mSessions.add(session);
+            ValueEventListener sessionListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    ArrayList<Session> sessions = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        //The child now holds the session details.
+                        String sessionDetails = child.getValue(String.class);
+                        //Create the session from the details and then
+                        Session session = Session.fromJSONString(sessionDetails);
+                        if(session != null) {
+                            //Add the session.
+                            sessions.add(session);
+                        }
                     }
+
+                    for (int i = 0; i < sessions.size(); i++) {
+                        String sessionId = sessions.get(i).getSessionId();
+                        mSessions.add(sessions.get(i));
+
+                        for (int j = 0; j < joinedSessions.size(); j++) {
+                            if(sessionId.equals(joinedSessions.get(j))) {
+                                mSessions.remove(sessions.get(i));
+                            }
+                        }
+                    }
+                    updateList();
+                    mDatabase.removeEventListener(this);
                 }
-                updateList();
-                mDatabase.removeEventListener(this);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        };
+                }
+            };
 
-        mDatabase.addValueEventListener(sessionListener);
+            mDatabase.addValueEventListener(sessionListener);
+        }
     }
+
+
 }

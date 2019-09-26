@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class CategoryFragment extends Fragment {
 
-    private static final String TAG = "CategoryFragment.TAG";
-
     private static final String ARG_ITEMS = "items";
 
     private GridView mGridView;

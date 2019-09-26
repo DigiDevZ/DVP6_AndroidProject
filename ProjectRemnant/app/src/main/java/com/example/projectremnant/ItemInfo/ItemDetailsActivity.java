@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.projectremnant.Character.CharacterActivity;
+import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.Contracts.ItemContracts;
 import com.example.projectremnant.DataModels.Character;
 import com.example.projectremnant.DataModels.Items.Item;
@@ -28,11 +29,14 @@ import org.json.JSONObject;
 
 public class ItemDetailsActivity extends AppCompatActivity {
 
+    //TODO: ItemInfo package is good to go and signed off for final review.
+
     private static final String TAG = "ItemDetailsActivity";
 
-    //TODO: Set smaller text views that state "item bonus" and "unlock criteria" above the text boxes in the layout.
     public static final String EXTRA_ITEM = "EXTRA_ITEM";
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+
+    public static final String EXTRA_UPDATE = "EXTRA_UPDATE";
 
     //Variables for keeping track/updating user and character.
     private User mUser;
@@ -153,7 +157,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                     //Update database
                     DatabaseReference userReference = FirebaseDatabase.getInstance().getReference().child("users").child(mUser.getUserName());
-                    userReference.child("mUserCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    userReference.child("userCharacters").setValue(mUser.getUserCharacters()).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.i(TAG, "onSuccess: update successful from item activity.");
@@ -167,6 +171,21 @@ public class ItemDetailsActivity extends AppCompatActivity {
         //End of on create.
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Intent finish = new Intent();
+        finish.putExtra(CharacterActivity.EXTRA_USER, mUser);
+        finish.putExtra(CharacterActivity.EXTRA_CHARACTER, mCharacter);
+        finish.putExtra(EXTRA_CATEGORY, mCategory);
+
+        Log.i(TAG, "onBackPressed: finishing item details activity");
+        
+        setResult(RESULT_OK, finish);
+        this.finishActivity(ChecklistActivity.REQUEST_ITEMDETAILS);
+        super.onBackPressed();
+    }
+
     //TODO: May make two more methods that handle the armor and weapons since those display more.
     private void displayBasicItemInfo(Item _item, String _category) {
         //Display the info from the item.
@@ -175,6 +194,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         tv_itemBonus.setText(_item.getItemBonus());
         tv_itemCategory.setText(_category);
     }
+
 
 
     //TODO: these two methods are in the checklist fragment, I will put these in a static class soon.
@@ -223,7 +243,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         }
         return null;
     }
-
     private String getItemCategoryKey(int _category) {
 
         String itemCategory = "";

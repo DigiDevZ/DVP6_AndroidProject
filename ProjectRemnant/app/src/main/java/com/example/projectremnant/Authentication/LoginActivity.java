@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                         String characters = dataSnapshot.child("userCharacters").getValue(String.class);
                         String pass = dataSnapshot.child("userPass").getValue(String.class);
                         String joinedSessionIds = dataSnapshot.child("joinedSessionsIds").getValue(String.class);
-                        //TODO: Grab the session ids from database.
+                        //Grab the session ids from database.
 
                         User user = new User(name, pass, characters, id, joinedSessionIds);
 

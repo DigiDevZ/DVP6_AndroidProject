@@ -57,6 +57,8 @@
     <string name="character_activity_menu_add">Add</string>
     <string name="character_form_menu_save">Save</string>
 
+    <string name="character_activity_empty_data">No characters found, please touch the plus button to create a character to start tracking.</string>
+
     <string name="character_activity_form_gamertag">Gamertag:</string>
     <string name="character_activity_form_platform">Platform:</string>
     <string name="character_activity_form_nickname">Nickname:</string>

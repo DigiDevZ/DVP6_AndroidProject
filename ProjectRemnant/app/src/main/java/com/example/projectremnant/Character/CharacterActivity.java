@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,11 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CharacterActivity extends AppCompatActivity implements CharacterFormFragment.OnSaveTapped, CharacterGridFragment.CharacterFragmentListener {
 
-    //TODO: Fix the bug that causes overriding of the second character.
-    // I think it is coming from the checking off of boxes so on the checklist activity. updateCharacter interface method.
-    // also look at the updateUserCharacters method in User class.
-
-    //TODO: Implement the text view for telling users there are no characters and they have to make one.
+    //TODO: Character package is good to go and signed off for final review.
 
     private static final String TAG = "CharacterActivity.TAG";
     
@@ -59,7 +58,12 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
             //If the user contains characters, then load the grid view.
             String characters = mUser.getUserCharacters();
             if(characters.equals("Empty") || characters.isEmpty()){
-                //TODO: Load the text view stating there are no characters and to make one.
+                //Load the text view stating there are no characters and to make one.
+                TextView tv_empty = findViewById(R.id.tv_empty);
+                tv_empty.setVisibility(View.VISIBLE);
+
+                FrameLayout fl = findViewById(R.id.fragment_container);
+                fl.setVisibility(View.GONE);
             }else {
                 //Load the gridview
                 loadCharacterGridFragment(characters);
@@ -99,7 +103,16 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
 
     }
 
+    private void hideEmptyDataWarning() {
+        TextView tv_empty = findViewById(R.id.tv_empty);
+        tv_empty.setVisibility(View.GONE);
+
+        FrameLayout fl = findViewById(R.id.fragment_container);
+        fl.setVisibility(View.VISIBLE);
+
+    }
     private void loadCharacterFormFragment() {
+        hideEmptyDataWarning();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, CharacterFormFragment.newInstance(), TAG_FORM_FRAGMENT)
                 .addToBackStack("CharacterFormFragment")
@@ -107,9 +120,11 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
         setTitle("Character Creation Form");
     }
     private void loadCharacterGridFragment(String _characters) {
+        hideEmptyDataWarning();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, CharacterGridFragment.newInstance(_characters))
                 .commit();
+        setTitle("Characters");
     }
 
     private void intentToChecklist(Character _character, int _key) {
@@ -135,6 +150,7 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(getApplicationContext(), "New Character Created and saved", Toast.LENGTH_SHORT).show();
+                loadCharacterGridFragment(mUser.getUserCharacters());
             }
         });
     }

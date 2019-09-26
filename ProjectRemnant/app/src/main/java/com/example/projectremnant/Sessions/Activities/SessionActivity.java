@@ -32,6 +32,8 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
 
     private static final String TAG = "SessionActivity.TAG";
 
+    public static final int REQUEST_SESSIONDETAILS = 2;
+
     public static final String EXTRA_CHARACTER = "EXTRA_CHARACTER";
 
     DatabaseReference mDatabaseSessionCountRef = FirebaseDatabase.getInstance().getReference().child("sessionCount");
@@ -73,6 +75,19 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
             }else if(searchOption.equals("create")){
                 //Launch the session form fragment.
                 launchFormFragment();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK && requestCode == REQUEST_SESSIONDETAILS) {
+            if(data != null) {
+                mUser = (User) data.getSerializableExtra(CharacterActivity.EXTRA_USER);
+                mCharacter = (Character) data.getSerializableExtra(CharacterActivity.EXTRA_CHARACTER);
+                launchJoinedGroupsFragment();
             }
         }
     }
@@ -121,14 +136,10 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     }
 
     private void launchJoinedGroupsFragment() {
-        //TODO: Bug where the joined sessions are not loaded unless the user creates one in the app.
-
-        //TODO: Need Session details activity so that users can see the name and description and join the session.
-
         hideFormFrameLayouts();
         setTitle("Joined Sessions");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_list, SessionListFragment.newInstance(true, mUser))
+                .replace(R.id.fragment_container_list, SessionListFragment.newInstance(true, mUser, mCharacter))
                 .commit();
     }
 
@@ -136,7 +147,7 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
         hideFormFrameLayouts();
         setTitle("Available Sessions");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_list, SessionListFragment.newInstance(false, mUser))
+                .replace(R.id.fragment_container_list, SessionListFragment.newInstance(false, mUser, mCharacter))
                 .commit();
     }
 
@@ -202,6 +213,6 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
         starter.putExtra(SessionDetailsActivity.EXTRA_SESSION, _session);
         starter.putExtra(CharacterActivity.EXTRA_USER, mUser);
         starter.putExtra(CharacterActivity.EXTRA_CHARACTER, mCharacter);
-        startActivity(starter);
+        startActivityForResult(starter, REQUEST_SESSIONDETAILS);
     }
 }
