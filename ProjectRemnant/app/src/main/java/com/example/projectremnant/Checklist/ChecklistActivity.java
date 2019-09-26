@@ -27,7 +27,7 @@ import com.example.projectremnant.DataModels.Items.Weapon;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.ItemInfo.ItemDetailsActivity;
 import com.example.projectremnant.R;
-import com.example.projectremnant.Sessions.SessionActivity;
+import com.example.projectremnant.Sessions.Activities.SessionActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

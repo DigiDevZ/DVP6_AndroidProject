@@ -31,7 +31,7 @@ public class SessionListFragment extends ListFragment {
     private static final String ARG_JOINED = "joined";
     private static final String ARG_USER = "user";
 
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("sessions");
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("sessions");
 
     private User mUser;
 
@@ -89,7 +89,7 @@ public class SessionListFragment extends ListFragment {
     @Override
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        //mListener.sessionClicked(mSessions.get(position));
+        mListener.sessionClicked(mSessions.get(position));
     }
 
     private void updateList() {

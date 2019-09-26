@@ -52,16 +52,22 @@ public class CharacterActivity extends AppCompatActivity implements CharacterFor
             //Get the user account passed in from the signup activity or the login activity.
             mUser = (User) starter.getSerializableExtra(EXTRA_USER);
             Log.i(TAG, "onCreate: intent not null");
+
         }
 
-        //If the user contains characters, then load the grid view.
-        String characters = mUser.getUserCharacters();
-        if(characters.equals("Empty") || characters.isEmpty()){
-            //TODO: Load the text view stating there are no characters and to make one.
-        }else {
-            //Load the gridview
-            loadCharacterGridFragment(characters);
+        if(mUser != null) {
+            //If the user contains characters, then load the grid view.
+            String characters = mUser.getUserCharacters();
+            if(characters.equals("Empty") || characters.isEmpty()){
+                //TODO: Load the text view stating there are no characters and to make one.
+            }else {
+                //Load the gridview
+                loadCharacterGridFragment(characters);
+            }
         }
+
+
+
     }
 
     @Override

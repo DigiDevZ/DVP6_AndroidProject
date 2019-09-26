@@ -24,8 +24,7 @@ public class User implements Serializable {
     private String mUserCharacters;
     private String mJoinedSessionsIds;
 
-
-    private ArrayList<String> mJoinedSessions;
+    private ArrayList<String> mJoinedSessions = new ArrayList<>();
 
     public User() {
 
@@ -39,7 +38,6 @@ public class User implements Serializable {
         mUserId = _userId;
         mUserCharacters = _userCharacters;
         mJoinedSessionsIds = _joinedSessionIds;
-        mJoinedSessions = new ArrayList<>();
     }
 
 

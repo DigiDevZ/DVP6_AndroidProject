@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projectremnant.Character.CharacterActivity;
 import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
@@ -112,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 mDatabase.child("userCount").setValue(mUserCount+1);
                 //Intent to the checklist screen.
-                Intent i = new Intent(getApplicationContext(), ChecklistActivity.class);
+                Intent i = new Intent(getApplicationContext(), CharacterActivity.class);
                 startActivity(i);
             }
         }).addOnFailureListener(new OnFailureListener() {

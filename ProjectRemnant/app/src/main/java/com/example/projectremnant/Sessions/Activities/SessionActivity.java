@@ -1,4 +1,4 @@
-package com.example.projectremnant.Sessions;
+package com.example.projectremnant.Sessions.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SessionActivity extends AppCompatActivity implements SessionFormFragment.OnCreateTapped {
+import org.json.JSONArray;
+
+public class SessionActivity extends AppCompatActivity implements SessionFormFragment.OnCreateTapped, SessionListFragment.SessionListFragmentListener {
 
     private static final String TAG = "SessionActivity.TAG";
 
@@ -120,6 +122,9 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
 
     private void launchJoinedGroupsFragment() {
         //TODO: Bug where the joined sessions are not loaded unless the user creates one in the app.
+
+        //TODO: Need Session details activity so that users can see the name and description and join the session.
+
         hideFormFrameLayouts();
         setTitle("Joined Sessions");
         getSupportFragmentManager().beginTransaction()
@@ -163,7 +168,11 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     public void createTapped(String _sessionName, String _sessionDescription, String _playerLimit) {
         //Update the database with the session and close the fragment/launch the joined or available session list fragment.
 
-        final Session session = new Session(_sessionName, Integer.parseInt(_playerLimit), mCharacter.getCharacterForSession(), _sessionDescription);
+        //TODO: Shoddy fix but it will hold for now.
+        JSONArray characterArray = new JSONArray();
+        characterArray.put(mCharacter.getCharacterForSession());
+
+        final Session session = new Session(_sessionName, Integer.parseInt(_playerLimit), characterArray.toString(), _sessionDescription);
         String sessionDetails = session.getSessionDetails();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -181,5 +190,18 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
         });
 
 
+    }
+
+    /**
+     * Interface method for the session list fragment.
+     */
+
+    @Override
+    public void sessionClicked(Session _session) {
+        Intent starter = new Intent(getApplicationContext(), SessionDetailsActivity.class);
+        starter.putExtra(SessionDetailsActivity.EXTRA_SESSION, _session);
+        starter.putExtra(CharacterActivity.EXTRA_USER, mUser);
+        starter.putExtra(CharacterActivity.EXTRA_CHARACTER, mCharacter);
+        startActivity(starter);
     }
 }

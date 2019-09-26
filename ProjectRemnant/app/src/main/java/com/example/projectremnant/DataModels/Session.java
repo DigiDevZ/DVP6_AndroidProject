@@ -5,9 +5,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Session {
+public class Session implements Serializable {
 
     private static final String TAG = "Session.TAG";
 
