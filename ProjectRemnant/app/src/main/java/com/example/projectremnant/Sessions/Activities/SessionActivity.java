@@ -1,6 +1,7 @@
 package com.example.projectremnant.Sessions.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 
 public class SessionActivity extends AppCompatActivity implements SessionFormFragment.OnCreateTapped, SessionListFragment.SessionListFragmentListener {
+
+    //TODO: Session package is good to go and approved for final review.
 
     private static final String TAG = "SessionActivity.TAG";
 
@@ -136,6 +139,7 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     }
 
     private void launchJoinedGroupsFragment() {
+        swapButtonColors(true);
         hideFormFrameLayouts();
         setTitle("Joined Sessions");
         getSupportFragmentManager().beginTransaction()
@@ -144,11 +148,32 @@ public class SessionActivity extends AppCompatActivity implements SessionFormFra
     }
 
     private void launchAvailableGroupsFragment() {
+        swapButtonColors(false);
         hideFormFrameLayouts();
         setTitle("Available Sessions");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_list, SessionListFragment.newInstance(false, mUser, mCharacter))
                 .commit();
+    }
+
+    private void swapButtonColors(boolean _joined) {
+        if(_joined) {
+            Button btn_joined = findViewById(R.id.btn_joined);
+            btn_joined.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            btn_joined.setTextColor(Color.WHITE);
+
+            Button btn_available = findViewById(R.id.btn_available);
+            btn_available.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            btn_available.setTextColor(Color.WHITE);
+        }else {
+            Button btn_joined = findViewById(R.id.btn_joined);
+            btn_joined.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            btn_joined.setTextColor(Color.WHITE);
+
+            Button btn_available = findViewById(R.id.btn_available);
+            btn_available.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            btn_available.setTextColor(Color.WHITE);
+        }
     }
 
     private void updateSessionsCount() {
