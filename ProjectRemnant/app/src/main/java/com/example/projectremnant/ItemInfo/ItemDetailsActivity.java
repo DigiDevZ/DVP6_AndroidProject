@@ -16,7 +16,9 @@ import com.example.projectremnant.Character.CharacterActivity;
 import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.Contracts.ItemContracts;
 import com.example.projectremnant.DataModels.Character;
+import com.example.projectremnant.DataModels.Items.Armor;
 import com.example.projectremnant.DataModels.Items.Item;
+import com.example.projectremnant.DataModels.Items.Weapon;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -127,14 +129,13 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     itemCategory = getString(R.string.item_details_activity_category_trait);
                     displayBasicItemInfo(item, itemCategory);
                     break;
-                //TODO: if the category is armor or weapons, split off from here.
                 case 4:
                     itemCategory = getString(R.string.item_details_activity_category_weapon);
-
+                    displayWeaponItemInfo((Weapon) item, itemCategory);
                     break;
                 case 5:
                     itemCategory = getString(R.string.item_details_activity_category_armor);
-
+                    displayArmorItemInfo((Armor) item, itemCategory);
                     break;
                 default:
                     break;
@@ -195,7 +196,19 @@ public class ItemDetailsActivity extends AppCompatActivity {
         tv_itemCategory.setText(_category);
     }
 
+    private void displayWeaponItemInfo(Weapon _weapon, String _category) {
+        //Display the info from the item.
+        tv_itemName.setText(_weapon.getItemName());
+        tv_itemUnlockCriteria.setText(_weapon.getItemUnlockCriteria());
+        tv_itemCategory.setText(_category);
+    }
 
+    private void displayArmorItemInfo(Armor _armor, String _category) {
+        //Display the info from the item.
+        tv_itemName.setText(_armor.getItemName());
+        tv_itemUnlockCriteria.setText(_armor.getItemUnlockCriteria());
+        tv_itemCategory.setText(_category);
+    }
 
     //TODO: these two methods are in the checklist fragment, I will put these in a static class soon.
     private String addItemIdToOwnedObject(String _id, String _items, boolean _state) {
