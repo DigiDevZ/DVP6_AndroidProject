@@ -10,7 +10,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class DatabaseUtil {
+public class RemnantUtils {
+
+
+    
+
+    public static void encodePass(String _password) {
+
+    }
+
+    public static void decodePass(String _password) {
+
+    }
 
 
 

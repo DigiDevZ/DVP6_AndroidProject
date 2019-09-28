@@ -55,8 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
-    //TODO: Have to reupdate the keys for the login and sign in process ASAP
     //Check for the user with the entered username and then validate that, that user has the same password.
     private void loginTapped() {
 
