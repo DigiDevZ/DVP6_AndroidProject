@@ -12,13 +12,16 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordUtils {
 
-    //TODO: Once I know how this works, I need to comment it.
+    /**
+     * Password Utility class for encoding and verifying passwords.
+     */
 
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
+    //Will return a salt string used to encrypt passwords.
     public static String getSalt(int _length) {
         StringBuilder returnString = new StringBuilder(_length);
         for (int i = 0; i < _length; i++) {
@@ -27,7 +30,7 @@ public class PasswordUtils {
         return new String(returnString);
     }
 
-
+    //Generates a byte[] to be used as the hash for the password.
     public static byte[] hash(char[] _password, byte[] _salt) {
         PBEKeySpec spec = new PBEKeySpec(_password, _salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(_password, Character.MIN_VALUE);
@@ -41,18 +44,20 @@ public class PasswordUtils {
         }
     }
 
+    //Generates a salted and hashed password.
     public static String generateSecurePassword(String _password, String _salt) {
-        String returnValue = null;
+        String returnValue;
         byte[] securePassword = hash(_password.toCharArray(), _salt.getBytes());
 
-        //TODO: NOTE: TO get the getEncoder method i need to be on api 26, maybe i will want to revert to api 21 and find a way to encode passwords for that version.
+        //TODO: NOTE: To get the getEncoder method i need to be on api 26, maybe i will want to revert to api 21 and find a way to encode passwords for that version.
         returnValue = Base64.getEncoder().encodeToString(securePassword);
 
         return returnValue;
     }
 
+    //Will verify the password by encrypting the provided password with the same salt used on the secured password.
     public static boolean verifyUserPassword(String providedPassword, String securedPassword, String salt) {
-        boolean returnValue = false;
+        boolean returnValue;
 
         // Generate New secure password with the same salt
         String newSecurePassword = generateSecurePassword(providedPassword, salt);
