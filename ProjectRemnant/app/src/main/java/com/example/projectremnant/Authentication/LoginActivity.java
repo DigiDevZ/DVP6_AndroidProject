@@ -16,11 +16,15 @@ import com.example.projectremnant.Character.CharacterActivity;
 import com.example.projectremnant.Checklist.ChecklistActivity;
 import com.example.projectremnant.DataModels.User;
 import com.example.projectremnant.R;
+import com.example.projectremnant.Utils.PasswordUtils.PasswordUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -67,9 +71,22 @@ public class LoginActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()) {
                     //User exists
                     String userPass = dataSnapshot.child("userPass").getValue(String.class);
-                    Log.i(TAG, "onDataChange: password: " + userPass);
 
-                    if(password.equals(userPass)) {
+                    boolean verifiedPass = false;
+                    //Convert the userPass into the JSON array and get the encrypted pass and salt
+                    try {
+                        JSONArray passArray = new JSONArray(userPass);
+                        String databasePass = (String) passArray.get(0);
+                        String databaseSalt = (String) passArray.get(1);
+
+                        //Check that the entered password matches the database password.
+                        verifiedPass = verifyPassword(password, databasePass, databaseSalt);
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //If the password is verified then log in the user.
+                    if(verifiedPass) {
                         //Launch the intent to the checklist screen.
                         Log.i(TAG, "onDataChange: login succesful.");
 
@@ -110,6 +127,11 @@ public class LoginActivity extends AppCompatActivity {
         //Attach the listener.
         mDatabase.child(userName).addValueEventListener(loginListener);
         //End of loginTapped.
+    }
+
+    //This method will verify the users entered password with the password stored in the database.
+    private boolean verifyPassword(String _providedPassword, String _databasePassword, String _databaseSalt) {
+        return PasswordUtils.verifyUserPassword(_providedPassword, _databasePassword, _databaseSalt);
     }
 
 
