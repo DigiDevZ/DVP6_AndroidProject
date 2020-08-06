@@ -1,6 +1,8 @@
 # ProjectRemnant: Filter the Ashes
 Repo for Android application - Project Remnant  
 
+## NO LONGER SUPPORTING THIS PROJECT AS OF 2019
+
 ## Application Features
     - Checklist of items that are in the video game Remannt: Filter the Ashes.
     - Users can have up to 4 characters with their own checklists.
